@@ -111,6 +111,7 @@
   .booking-soon{margin:0;color:var(--dim);font-family:var(--display);font-size:22px;line-height:1.5;text-align:center;padding:18px 0 6px}
   .booking-prop-note{margin:0 0 16px;color:var(--dim);font-size:14px}
   .booking-grid{display:grid;gap:16px}
+  [hidden]{display:none!important}
   .booking-field label{display:block;margin-bottom:6px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
   .booking-field input,.booking-field select{width:100%;min-height:48px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg);color:var(--text);padding:11px 12px;font:inherit;font-size:15px}
   .quote-box{border-top:1px solid var(--border);padding-top:16px;margin-top:20px}
@@ -646,15 +647,32 @@ document.addEventListener("keydown", function(e){
       });
     }
 
+    var SOON_GENERIC = "Direct bookings open soon. In the meantime, you can book any house on Airbnb from its card above, or write to us on Instagram @suahouses with any question.";
+    var SOON_QUOTE = "Online payments open soon. Check your dates and price below, or write to us on Instagram @suahouses to book directly.";
+    function setPayUI(show){
+      form.querySelectorAll(".guest-details, #bkPay, .pay-note").forEach(function(el){ el.hidden = !show; });
+      var phoneField = document.getElementById("bkPhone");
+      if(phoneField && phoneField.closest){ phoneField.closest(".booking-grid").hidden = !show; }
+    }
     function showSoon(kind){
       form.hidden = true;
+      soonBox.textContent = SOON_GENERIC;
       soonBox.hidden = (kind !== "generic");
       centricoBox.hidden = (kind !== "centrico");
     }
     function showForm(){
       soonBox.hidden = true;
       centricoBox.hidden = true;
+      soonBox.textContent = SOON_GENERIC;
       form.hidden = false;
+      setPayUI(true);
+    }
+    function showQuoteOnly(){
+      soonBox.textContent = SOON_QUOTE;
+      soonBox.hidden = false;
+      centricoBox.hidden = true;
+      form.hidden = false;
+      setPayUI(false);
     }
     function refreshPanel(){
       if(!health){ showSoon("generic"); return; }
@@ -663,7 +681,7 @@ document.addEventListener("keydown", function(e){
         showSoon(prop === "centrico19" ? "centrico" : "generic");
         return;
       }
-      if(!health.bold_configured){ showSoon("generic"); return; }
+      if(!health.bold_configured){ showQuoteOnly(); return; }
       showForm();
     }
 
