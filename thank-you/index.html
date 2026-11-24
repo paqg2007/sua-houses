@@ -28,11 +28,11 @@
 </head>
 <body>
 <main>
-  <div class="mark">✓</div>
-  <h1>Thank you!</h1>
-  <p><strong>Your payment was received.</strong></p>
-  <p>We will confirm your booking by email and WhatsApp shortly, with your check-in details and directions to the house.</p>
-  <div class="card">
+  <div class="mark" id="thanksMark">✓</div>
+  <h1 id="thanksTitle">Thank you!</h1>
+  <p id="thanksLead"><strong>Your payment was received.</strong></p>
+  <p id="thanksSub">We will confirm your booking by email and WhatsApp shortly, with your check-in details and directions to the house.</p>
+  <div class="card" id="nextCard">
     <h2>What happens next</h2>
     <ul>
       <li>We confirm your dates and send you the check-in instructions.</li>
@@ -40,8 +40,22 @@
       <li>Any question in the meantime, write to us on WhatsApp. We answer personally, in English or Spanish.</li>
     </ul>
   </div>
-  <a class="btn" href="/">Back to Sua Houses</a>
+  <a class="btn" id="backBtn" href="/">Back to Sua Houses</a>
 </main>
 <a class="wa-float" href="https://wa.me/573015013948?text=Hi!%20I%20just%20booked%20with%20Sua%20Houses%20and%20I%20have%20a%20question." target="_blank" rel="noreferrer" aria-label="Chat with us on WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M12 2C6.5 2 2 6.5 2 12c0 1.9.6 3.7 1.6 5.2L2 22l4.9-1.5C8.4 21.4 10.1 22 12 22c5.5 0 10-4.5 10-10S17.5 2 12 2z"/><path fill="#25d366" transform="translate(6 6) scale(0.5)" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg><span>Chat with us</span></a>
+<script>
+(function(){
+  var status = new URLSearchParams(location.search).get("bold-tx-status");
+  if(!status || status === "approved"){ return; }
+  document.getElementById("thanksMark").textContent = "!";
+  document.getElementById("thanksTitle").textContent = "Payment not completed";
+  document.getElementById("thanksLead").innerHTML = "<strong>Your payment did not go through.</strong>";
+  document.getElementById("thanksSub").textContent = "No charge was made. You can try again with another card, or write to us on WhatsApp and we will help you complete your booking.";
+  document.getElementById("nextCard").hidden = true;
+  var btn = document.getElementById("backBtn");
+  btn.textContent = "Back to booking";
+  btn.href = "/#book";
+})();
+</script>
 </body>
 </html>
