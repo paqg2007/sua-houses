@@ -17,12 +17,12 @@
   :root{
     color-scheme: light dark;
     --bg:#f4efe6; --surface:#fffaf0; --text:#18130f; --dim:#6f6255;
-    --border:#cbbba7; --accent:#9a7414; --gold:#d4af37; --ink:#0b0b0b;
+    --border:#cbbba7; --accent:#9a7414; --gold:#d4af37; --gold-soft:#f3e5b8; --ink:#0b0b0b;
     --blue:#0f5ca8; --rust:#a84a2a; --radius:4px;
     --display:"Cormorant Garamond", Georgia, serif;
   }
   @media (prefers-color-scheme: dark){
-    :root{ --bg:#0b0b0b; --surface:#17130f; --text:#f4efe6; --dim:#c7b9a6; --border:#4a4035; --accent:#d4af37; }
+    :root{ --bg:#0b0b0b; --surface:#17130f; --text:#f4efe6; --dim:#c7b9a6; --border:#4a4035; --accent:#d4af37; --gold-soft:#3d3113; }
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -114,6 +114,32 @@
   [hidden]{display:none!important}
   .booking-field label{display:block;margin-bottom:6px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
   .booking-field input,.booking-field select{width:100%;min-height:48px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg);color:var(--text);padding:11px 12px;font:inherit;font-size:15px}
+  .cal-label{display:block;margin-bottom:6px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+  .cal-summary{margin:0 0 14px;color:var(--dim);font-size:15px;line-height:1.6}
+  .cal-clear{border:0;background:transparent;color:var(--accent);font:inherit;font-size:14px;font-weight:700;cursor:pointer;padding:8px 0;text-decoration:underline;text-underline-offset:3px}
+  .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .cal-nav-btn{width:44px;height:44px;min-height:44px;border:1px solid var(--border);border-radius:50%;background:transparent;color:var(--text);font-size:22px;line-height:1;cursor:pointer}
+  .cal-nav-btn:disabled{opacity:.35;cursor:default}
+  .cal-months{display:grid;gap:26px}
+  .cal-month h3{margin:0 0 8px;text-align:center;font-size:24px;font-weight:600}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+  .cal-weekday{text-align:center;font-size:11px;font-weight:800;letter-spacing:.06em;color:var(--dim);padding:7px 0}
+  .cal-day{aspect-ratio:1;border:0;border-radius:50%;background:transparent;color:var(--text);font:inherit;font-size:14px;cursor:pointer;min-width:0;min-height:0;padding:0}
+  .cal-day:hover:not(:disabled){background:var(--gold-soft)}
+  .cal-day:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .cal-day.is-past{opacity:.38}
+  .cal-day.is-busy{color:var(--dim);text-decoration:line-through}
+  .cal-day.is-today{box-shadow:inset 0 0 0 1.5px var(--gold)}
+  .cal-day.in-range{background:var(--gold-soft);border-radius:0}
+  .cal-day.is-start,.cal-day.is-end{background:var(--gold);color:#15100a;font-weight:700;text-decoration:none}
+  .cal-day.is-checkout-ok{box-shadow:inset 0 0 0 1.5px var(--gold)}
+  .cal-day:disabled{cursor:default}
+  .cal-legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:16px;color:var(--dim);font-size:13px}
+  .cal-legend i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+  .cal-legend .lg-booked{background:var(--dim);opacity:.45}
+  .cal-legend .lg-selected{background:var(--gold)}
+  .cal-legend .lg-today{background:transparent;box-shadow:inset 0 0 0 1.5px var(--gold)}
+  .cal-month.second{display:none}
   .quote-box{border-top:1px solid var(--border);padding-top:16px;margin-top:20px}
   .quote-line{display:flex;justify-content:space-between;gap:16px;padding:5px 0;color:var(--dim);font-size:15px}
   .quote-line.total{border-top:1px solid var(--border);margin-top:10px;padding-top:12px;color:var(--text);font-family:var(--display);font-size:26px;font-weight:600}
@@ -127,6 +153,8 @@
   @media (min-width:720px){
     .booking-grid.two{grid-template-columns:1fr 1fr}
     .booking-panel{padding:34px 36px}
+    .cal-months{grid-template-columns:1fr 1fr}
+    .cal-month.second{display:block}
   }
 
   /* Visit / why */
@@ -317,9 +345,22 @@
       <p class="booking-soon" id="centricoSoon" hidden>Direct bookings for Céntrico19 open soon. In the meantime, you can <a class="text-link" href="https://www.airbnb.com/rooms/755309137894303486" target="_blank" rel="noreferrer">book Céntrico19 on Airbnb</a>, or write to us on Instagram @suahouses with any question.</p>
       <form id="bookingForm" hidden novalidate>
         <p class="booking-prop-note" id="bkPropNote"></p>
-        <div class="booking-grid two">
-          <div class="booking-field"><label for="bkCheckin">Check-in</label><input type="date" id="bkCheckin" required /></div>
-          <div class="booking-field"><label for="bkCheckout">Check-out</label><input type="date" id="bkCheckout" required /></div>
+        <input type="hidden" id="bkCheckin" />
+        <input type="hidden" id="bkCheckout" />
+        <div class="booking-field">
+          <span class="cal-label" id="bkCalLabel">Dates</span>
+          <p class="cal-summary" id="bkCalSummary">Select your check-in date.</p>
+          <div class="cal-nav">
+            <button type="button" class="cal-nav-btn" id="bkCalPrev" aria-label="Previous month">‹</button>
+            <button type="button" class="cal-nav-btn" id="bkCalNext" aria-label="Next month">›</button>
+          </div>
+          <div class="cal-months" id="bkCalMonths" role="group" aria-labelledby="bkCalLabel"></div>
+          <div class="cal-legend">
+            <span><i class="lg-selected"></i>Selected</span>
+            <span><i class="lg-booked"></i>Booked</span>
+            <span><i class="lg-today"></i>Today</span>
+          </div>
+          <button type="button" class="cal-clear" id="bkCalClear" hidden>Clear dates</button>
         </div>
         <div class="booking-grid">
           <div class="booking-field"><label for="bkGuests">Guests</label><select id="bkGuests"></select></div>
@@ -624,7 +665,9 @@ document.addEventListener("keydown", function(e){
     var quoteBox = el("bkQuote"), propNote = el("bkPropNote");
     var nameEl = el("bkName"), emailEl = el("bkEmail"), phoneEl = el("bkPhone");
     var payBtn = el("bkPay"), payNote = el("bkPayNote");
-    if(!soonBox || !form || !checkinEl || !payBtn){ return; }
+    var calMonthsEl = el("bkCalMonths"), calSummaryEl = el("bkCalSummary");
+    var calPrevBtn = el("bkCalPrev"), calNextBtn = el("bkCalNext"), calClearBtn = el("bkCalClear");
+    if(!soonBox || !form || !checkinEl || !payBtn || !calMonthsEl || !calSummaryEl || !calPrevBtn || !calNextBtn || !calClearBtn){ return; }
 
     function fmtCOP(n){ return "COP " + Math.round(n).toLocaleString("en-US"); }
     function fmtDay(d){ return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
@@ -634,6 +677,162 @@ document.addEventListener("keydown", function(e){
       var d = new Date(+p[0], +p[1] - 1, +p[2]);
       d.setDate(d.getDate() + n);
       return fmtDay(d);
+    }
+
+    /* Calendar picker. Busy nights come from /availability (today to +12
+       months), reloaded per property. A busy date is a booked night: it can
+       never be a check-in, but it can be a check-out, since the checkout
+       day itself is not a night of the stay. The server still validates
+       every range at quote time. */
+    var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    var WEEKDAY_SHORT = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+    var busyByProp = {};
+    var busySeq = 0;
+    var calBase = (function(){ var n = new Date(); return { y: n.getFullYear(), m: n.getMonth() }; })();
+    var selIn = "", selOut = "";
+
+    function busySet(){ return busyByProp[prop] || {}; }
+    function isBusy(iso){ return !!busySet()[iso]; }
+    function firstBusyAfter(iso){
+      var d = addDays(iso, 1), end = addDays(iso, 370), busy = busySet();
+      while(d <= end){ if(busy[d]){ return d; } d = addDays(d, 1); }
+      return "";
+    }
+    function nightsClash(ci, co){
+      var d = ci, busy = busySet();
+      while(d < co){ if(busy[d]){ return true; } d = addDays(d, 1); }
+      return false;
+    }
+    function fmtLong(iso){
+      var p = iso.split("-");
+      return MONTHS[+p[1] - 1] + " " + (+p[2]) + ", " + p[0];
+    }
+    function fmtAria(iso){
+      var p = iso.split("-");
+      var d = new Date(+p[0], +p[1] - 1, +p[2]);
+      return WEEKDAYS[d.getDay()] + ", " + fmtLong(iso);
+    }
+    function nightCount(ci, co){
+      var n = 0, d = ci;
+      while(d < co){ n++; d = addDays(d, 1); }
+      return n;
+    }
+
+    function dayState(iso, today, limit){
+      var st = { disabled: false, cls: "", label: "" };
+      if(iso < today){
+        st.disabled = true; st.cls = " is-past"; st.label = ", past";
+        return st;
+      }
+      var busy = isBusy(iso);
+      if(!selIn || selOut){
+        if(busy){ st.disabled = true; st.cls = " is-busy"; st.label = ", booked"; }
+        return st;
+      }
+      if(iso <= selIn){
+        if(busy){ st.disabled = true; st.cls = " is-busy"; st.label = ", booked"; }
+        return st;
+      }
+      if(limit && iso > limit){
+        st.disabled = true;
+        if(busy){ st.cls = " is-busy"; st.label = ", booked"; }
+        else{ st.cls = " is-past"; st.label = ", unavailable"; }
+        return st;
+      }
+      if(busy){
+        st.cls = " is-busy is-checkout-ok"; st.label = ", booked, available as check-out";
+        return st;
+      }
+      return st;
+    }
+
+    function renderMonth(y, m, second){
+      var daysInMonth = new Date(y, m + 1, 0).getDate();
+      var offset = new Date(y, m, 1).getDay();
+      var today = todayStr();
+      var limit = (selIn && !selOut) ? firstBusyAfter(selIn) : "";
+      var html = '<div class="cal-month' + (second ? ' second' : '') + '"><h3>' + MONTHS[m] + ' ' + y + '</h3><div class="cal-grid">';
+      WEEKDAY_SHORT.forEach(function(w){ html += '<div class="cal-weekday">' + w + '</div>'; });
+      for(var i = 0; i < offset; i++){ html += '<span></span>'; }
+      for(var d = 1; d <= daysInMonth; d++){
+        var iso = y + "-" + String(m + 1).padStart(2, "0") + "-" + String(d).padStart(2, "0");
+        var st = dayState(iso, today, limit);
+        var cls = "cal-day" + st.cls;
+        var label = fmtAria(iso) + st.label;
+        if(iso === today){ cls += " is-today"; label += ", today"; }
+        if(iso === selIn){ cls += " is-start"; label += ", selected as check-in"; }
+        if(iso === selOut){ cls += " is-end"; label += ", selected as check-out"; }
+        if(selIn && selOut && iso > selIn && iso < selOut){ cls += " in-range"; }
+        html += '<button type="button" class="' + cls + '" data-date="' + iso + '" aria-label="' + label + '"' + (st.disabled ? ' disabled' : '') + '>' + d + '</button>';
+      }
+      html += '</div></div>';
+      return html;
+    }
+
+    function updateSummary(){
+      if(!selIn){
+        calSummaryEl.textContent = "Select your check-in date.";
+      }else if(!selOut){
+        calSummaryEl.textContent = "Check-in " + fmtLong(selIn) + ". Now select your check-out date.";
+      }else{
+        var n = nightCount(selIn, selOut);
+        calSummaryEl.textContent = "Check-in " + fmtLong(selIn) + ". Check-out " + fmtLong(selOut) + ". " + n + (n === 1 ? " night." : " nights.");
+      }
+      calClearBtn.hidden = !selIn;
+    }
+
+    function renderCalendar(){
+      var y = calBase.y, m = calBase.m;
+      var next = (m === 11) ? { y: y + 1, m: 0 } : { y: y, m: m + 1 };
+      calMonthsEl.innerHTML = renderMonth(y, m, false) + renderMonth(next.y, next.m, true);
+      var now = new Date();
+      calPrevBtn.disabled = (y === now.getFullYear() && m === now.getMonth());
+      updateSummary();
+    }
+
+    function loadBusy(){
+      var p = prop;
+      if(busyByProp[p]){ renderCalendar(); return; }
+      var seq = ++busySeq;
+      var from = todayStr();
+      fetchJSON(API + "/availability?property=" + encodeURIComponent(p) + "&from=" + from + "&to=" + addDays(from, 365), null, 10000)
+      .then(function(res){
+        if(seq !== busySeq){ return; }
+        var map = {};
+        ((res.data && res.data.busy) || []).forEach(function(d){ map[d] = true; });
+        busyByProp[p] = map;
+        renderCalendar();
+      })
+      .catch(function(){ /* Calendar stays usable; the quote step still checks availability. */ });
+    }
+
+    function clearDates(){
+      selIn = ""; selOut = "";
+      checkinEl.value = ""; checkoutEl.value = "";
+      clearQuote();
+      renderCalendar();
+    }
+
+    function onDayClick(iso){
+      if(iso < todayStr()){ return; }
+      if(!selIn || selOut || iso <= selIn){
+        if(isBusy(iso)){ return; }
+        selIn = iso; selOut = "";
+        checkinEl.value = iso; checkoutEl.value = "";
+        clearQuote();
+        renderCalendar();
+        return;
+      }
+      if(nightsClash(selIn, iso)){
+        quoteError("Some of those nights are already booked. Please choose different dates.");
+        renderCalendar();
+        return;
+      }
+      selOut = iso;
+      checkoutEl.value = iso;
+      renderCalendar();
+      requestQuote();
     }
 
     function fetchJSON(url, opts, timeoutMs){
@@ -721,7 +920,8 @@ document.addEventListener("keydown", function(e){
       var btns = document.querySelectorAll("#propPick button");
       btns.forEach(function(b){ b.classList.toggle("active", b.getAttribute("data-prop") === p); });
       rebuildGuests();
-      clearQuote();
+      clearDates();
+      loadBusy();
       refreshPanel();
     }
 
@@ -857,14 +1057,24 @@ document.addEventListener("keydown", function(e){
     }
 
     /* Wire up */
-    var today = todayStr();
-    checkinEl.min = today;
-    checkoutEl.min = today;
-    checkinEl.addEventListener("change", function(){
-      if(checkinEl.value){ checkoutEl.min = addDays(checkinEl.value, 1); }
-      requestQuote();
+    calMonthsEl.addEventListener("click", function(e){
+      var t = (e.target && e.target.closest) ? e.target.closest("button[data-date]") : null;
+      if(!t || t.disabled){ return; }
+      onDayClick(t.getAttribute("data-date"));
     });
-    checkoutEl.addEventListener("change", requestQuote);
+    calPrevBtn.addEventListener("click", function(){
+      var now = new Date();
+      if(calBase.y === now.getFullYear() && calBase.m === now.getMonth()){ return; }
+      if(calBase.m === 0){ calBase = { y: calBase.y - 1, m: 11 }; }
+      else{ calBase = { y: calBase.y, m: calBase.m - 1 }; }
+      renderCalendar();
+    });
+    calNextBtn.addEventListener("click", function(){
+      if(calBase.m === 11){ calBase = { y: calBase.y + 1, m: 0 }; }
+      else{ calBase = { y: calBase.y, m: calBase.m + 1 }; }
+      renderCalendar();
+    });
+    calClearBtn.addEventListener("click", clearDates);
     guestsEl.addEventListener("change", requestQuote);
     form.addEventListener("submit", function(e){ e.preventDefault(); startPayment(); });
     payBtn.addEventListener("click", startPayment);
@@ -879,6 +1089,18 @@ document.addEventListener("keydown", function(e){
       var sec = document.getElementById("book");
       if(sec){ sec.scrollIntoView({ behavior: "smooth" }); }
     });
+
+    /* Test hook for the simulated DOM checks. Helpers around the same
+       day-click handler the calendar buttons use. No effect on the page. */
+    window.__suaBookingTest = {
+      clickDay: onDayClick,
+      clearDates: clearDates,
+      selectProp: selectProp,
+      getSelection: function(){ return { checkin: checkinEl.value, checkout: checkoutEl.value }; },
+      getBusy: function(){ return Object.keys(busySet()).sort(); },
+      setBusy: function(list){ var map = {}; list.forEach(function(d){ map[d] = true; }); busyByProp[prop] = map; renderCalendar(); },
+      getCalBase: function(){ return { y: calBase.y, m: calBase.m }; }
+    };
 
     selectProp("xia-xue");
     fetchJSON(API + "/health", null, 8000).then(function(res){
