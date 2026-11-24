@@ -121,6 +121,12 @@
   .neighborhood ul{margin:0;padding:0;list-style:none;border-top:1px solid rgba(255,255,255,.35)}
   .neighborhood li{display:flex;justify-content:space-between;gap:18px;padding:17px 0;border-bottom:1px solid rgba(255,255,255,.35)}
   .neighborhood li b{text-align:right;font-size:12px}
+  .places-grid{display:grid;grid-template-columns:1fr;gap:16px}
+  .place-card{position:relative;border-radius:14px;overflow:hidden;margin:0;aspect-ratio:4/3;background:#0a4a86}
+  .place-card img{width:100%;height:100%;object-fit:cover;display:block}
+  .place-card figcaption{position:absolute;inset:auto 0 0 0;padding:48px 16px 14px;background:linear-gradient(to top,rgba(0,0,0,.78),rgba(0,0,0,0));color:#fff}
+  .place-card figcaption b{display:block;font-family:var(--display);font-size:27px;font-weight:600;line-height:1.05}
+  .place-card figcaption span{font-size:12px;letter-spacing:.05em;color:#f3d47d}
 
   /* FAQ */
   .faq-section{max-width:940px}
@@ -166,7 +172,9 @@
     .house-row.reverse .house-gallery{order:2}
     .house-row.reverse .house-copy{order:1}
     .visit-section{grid-template-columns:.8fr 1.2fr}
-    .neighborhood{grid-template-columns:1fr 1fr;align-items:center;padding-inline:max(20px,calc((100vw - 1180px)/2))}
+    .neighborhood{grid-template-columns:1fr 1fr;align-items:start;padding-inline:max(20px,calc((100vw - 1180px)/2))}
+    .neighborhood>div:first-child{grid-column:1/-1}
+    .places-grid{grid-template-columns:repeat(3,1fr);grid-column:1/-1;gap:18px}
     footer{grid-template-columns:auto 1.2fr 1fr auto;align-items:start}
   }
   @media (max-width:520px){
@@ -250,14 +258,32 @@
       <p>Cobblestone streets, colorful facades, museums, theaters and the mountain watching over it all. The three homes sit in Bogotá's historic center, close to the places travelers come to see.</p>
       <a class="text-link" href="#houses">Meet the houses <span aria-hidden="true">→</span></a>
     </div>
-    <ul>
-      <li><span>Chorro de Quevedo</span><b>450 m from Xia Xue</b></li>
-      <li><span>Museo Botero</span><b>500 m from Xia Xue</b></li>
-      <li><span>Teatro Colón</span><b>500 m from Xia Xue</b></li>
-      <li><span>Plaza de Bolívar</span><b>750 m from Xia Xue</b></li>
-      <li><span>Museo del Oro</span><b>1.2 km from Xia Xue</b></li>
-      <li><span>Monserrate</span><b>2 km from Xia Xue</b></li>
-    </ul>
+    <div class="places-grid">
+      <figure class="place-card">
+        <img src="assets/neighborhood/chorro-de-quevedo.jpg" alt="Chorro de Quevedo plaza in La Candelaria, Bogotá" loading="lazy">
+        <figcaption><b>Chorro de Quevedo</b><span>450 m from Xia Xue</span></figcaption>
+      </figure>
+      <figure class="place-card">
+        <img src="assets/neighborhood/museo-botero.jpg" alt="The courtyard of Museo Botero in La Candelaria, Bogotá" loading="lazy">
+        <figcaption><b>Museo Botero</b><span>500 m from Xia Xue</span></figcaption>
+      </figure>
+      <figure class="place-card">
+        <img src="assets/neighborhood/teatro-colon.jpg" alt="The gilded auditorium of Teatro Colón, Bogotá" loading="lazy">
+        <figcaption><b>Teatro Colón</b><span>500 m from Xia Xue</span></figcaption>
+      </figure>
+      <figure class="place-card">
+        <img src="assets/neighborhood/plaza-de-bolivar.jpg" alt="Plaza de Bolívar with the Catedral Primada, Bogotá" loading="lazy">
+        <figcaption><b>Plaza de Bolívar</b><span>750 m from Xia Xue</span></figcaption>
+      </figure>
+      <figure class="place-card">
+        <img src="assets/neighborhood/museo-del-oro.jpg" alt="The Museo del Oro building in downtown Bogotá" loading="lazy">
+        <figcaption><b>Museo del Oro</b><span>1.2 km from Xia Xue</span></figcaption>
+      </figure>
+      <figure class="place-card">
+        <img src="assets/neighborhood/monserrate.jpg" alt="Monserrate church on the mountain above Bogotá" loading="lazy">
+        <figcaption><b>Monserrate</b><span>2 km from Xia Xue</span></figcaption>
+      </figure>
+    </div>
   </section>
 
   <!-- FAQ -->
