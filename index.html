@@ -186,6 +186,10 @@
   .footer-tagline{color:var(--text);font-family:var(--display);font-size:25px;font-style:italic}
   .footer-links{display:grid;gap:4px}
   .footer-links a{color:var(--text);text-underline-offset:4px;padding:7px 0;font-size:14px}
+  .wa-float{position:fixed;right:20px;bottom:20px;z-index:60;display:flex;align-items:center;gap:10px;background:#25d366;color:#fff;text-decoration:none;font-weight:700;font-size:15px;padding:13px 20px 13px 14px;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.25);transition:transform .15s ease,box-shadow .15s ease}
+  .wa-float:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.3)}
+  .wa-float svg{width:26px;height:26px;flex:none}
+  @media (max-width:520px){ .wa-float{padding:13px;right:16px;bottom:16px} .wa-float span{display:none} }
   .legal{align-self:end}
 
   /* Lightbox */
@@ -889,5 +893,6 @@ document.addEventListener("keydown", function(e){
   }
 })();
 </script>
+<a class="wa-float" href="https://wa.me/573015013948?text=Hi!%20I%20have%20a%20question%20about%20staying%20at%20Sua%20Houses." target="_blank" rel="noreferrer" aria-label="Chat with us on WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M12 2C6.5 2 2 6.5 2 12c0 1.9.6 3.7 1.6 5.2L2 22l4.9-1.5C8.4 21.4 10.1 22 12 22c5.5 0 10-4.5 10-10S17.5 2 12 2z"/><path fill="#25d366" transform="translate(6 6) scale(0.5)" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg><span>Chat with us</span></a>
 </body>
 </html>
