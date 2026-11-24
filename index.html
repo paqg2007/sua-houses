@@ -69,8 +69,18 @@
   .name-meaning{margin:0 0 12px;letter-spacing:.14em;font-size:11px;font-weight:800;text-transform:uppercase;color:var(--accent)}
   .name-card p:last-child{margin:0;color:var(--dim);line-height:1.65;font-size:15px}
   .names-closing{margin:0;font-family:var(--display);font-size:26px}
-  .intro-nav{display:flex;justify-content:center;gap:8px 26px;flex-wrap:wrap;margin-top:34px}
-  .intro-nav a{color:var(--text);font-weight:700;font-size:14px;text-underline-offset:5px;padding:8px 2px}
+  .intro-nav{display:grid;grid-template-columns:repeat(3,1fr);gap:24px 10px;justify-items:center;margin-top:34px}
+  .intro-nav a{display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--text);font-weight:700;font-size:14px;line-height:1.25;text-align:center;text-decoration:none}
+  .nav-circle{width:104px;height:104px;border-radius:50%;border:2px solid var(--accent);overflow:hidden;background:var(--surface);display:flex;align-items:center;justify-content:center;flex:none;transition:transform .18s ease}
+  .nav-circle img{width:100%;height:100%;object-fit:cover;display:block}
+  .nav-circle.nav-logo img{object-fit:contain;padding:17%}
+  .nav-circle svg{width:50px;height:50px;color:var(--accent)}
+  .intro-nav a:hover .nav-circle{transform:translateY(-3px)}
+  @media (min-width:720px){
+    .intro-nav{grid-template-columns:repeat(6,1fr);gap:18px}
+    .nav-circle{width:118px;height:118px}
+    .intro-nav a{font-size:15px}
+  }
 
   /* Houses */
   .houses-section,.reviews-section,.faq-section,.visit-section{max-width:1260px;margin:0 auto;padding:70px 20px}
@@ -285,12 +295,30 @@
     <h2>Not a hotel. A collection of places with a soul.</h2>
     <p>Pablo and Patricia have shaped each home around its original character, from a fireside refuge to a three-level journey toward the light. Choose the atmosphere that feels like yours.</p>
     <nav class="intro-nav" aria-label="On this page">
-      <a href="#houses">The houses</a>
-      <a href="#book">Book direct</a>
-      <a href="#names">The names</a>
-      <a href="#neighborhood">La Candelaria</a>
-      <a href="#faq">Good to know</a>
-      <a href="https://www.instagram.com/suahouses/" target="_blank" rel="noreferrer">Instagram</a>
+      <a href="#houses">
+        <span class="nav-circle"><img src="assets/xia-xue/01.jpg" alt=""></span>
+        <span>The houses</span>
+      </a>
+      <a href="#book">
+        <span class="nav-circle"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><rect x="6" y="10" width="36" height="32" rx="5"/><line x1="6" y1="19" x2="42" y2="19"/><line x1="15" y1="5" x2="15" y2="12"/><line x1="33" y1="5" x2="33" y2="12"/><circle cx="15" cy="27" r="1.8" fill="currentColor" stroke="none"/><circle cx="24" cy="27" r="1.8" fill="currentColor" stroke="none"/><circle cx="33" cy="27" r="1.8" fill="currentColor" stroke="none"/><circle cx="15" cy="34" r="1.8" fill="currentColor" stroke="none"/><circle cx="24" cy="34" r="1.8" fill="currentColor" stroke="none"/><circle cx="33" cy="34" r="1.8" fill="currentColor" stroke="none"/></svg></span>
+        <span>Book direct</span>
+      </a>
+      <a href="#names">
+        <span class="nav-circle nav-logo"><img src="assets/logo-universo.png" alt=""></span>
+        <span>The names</span>
+      </a>
+      <a href="#neighborhood">
+        <span class="nav-circle"><img src="assets/neighborhood/chorro-de-quevedo.jpg" alt=""></span>
+        <span>La Candelaria</span>
+      </a>
+      <a href="#faq">
+        <span class="nav-circle"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="17" cy="17" r="9"/><line x1="24" y1="24" x2="41" y2="41"/><line x1="32" y1="32" x2="40" y2="24"/><line x1="37" y1="37" x2="43" y2="31"/></svg></span>
+        <span>Good to know</span>
+      </a>
+      <a href="https://www.instagram.com/suahouses/" target="_blank" rel="noreferrer">
+        <span class="nav-circle"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><rect x="7" y="7" width="34" height="34" rx="10"/><circle cx="24" cy="24" r="8"/><circle cx="33" cy="15" r="2.2" fill="currentColor" stroke="none"/></svg></span>
+        <span>Instagram</span>
+      </a>
     </nav>
   </section>
 
