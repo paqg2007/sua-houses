@@ -83,7 +83,7 @@
   }
 
   /* Houses */
-  .houses-section,.reviews-section,.faq-section,.visit-section{max-width:1260px;margin:0 auto;padding:70px 20px}
+  .houses-section,.hosts-section,.reviews-section,.faq-section,.visit-section{max-width:1260px;margin:0 auto;padding:70px 20px}
   .section-heading{display:grid;gap:22px;margin-bottom:44px}
   .section-heading>p{margin:0;max-width:430px;color:var(--dim);align-self:end;line-height:1.6}
   .house-row{display:grid;gap:30px;margin-bottom:100px}
@@ -107,6 +107,15 @@
   .amenities{display:grid;grid-template-columns:1fr 1fr;gap:9px 16px;margin:0;padding:0;list-style:none;font-size:13px}
   .amenities li::before{content:"◆";margin-right:7px;color:var(--accent);font-size:8px;vertical-align:2px}
   .house-bottom{display:flex;justify-content:space-between;gap:16px;margin:24px 0 18px;color:var(--dim);font-size:13px;flex-wrap:wrap}
+
+  /* Hosts */
+  .hosts-grid{display:grid;gap:30px;align-items:center}
+  @media (min-width:820px){.hosts-grid{grid-template-columns:1fr 1fr;gap:48px}}
+  .hosts-photo{margin:0}
+  .hosts-photo img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius)}
+  .hosts-photo figcaption{margin-top:12px;text-align:center;font-size:14px;font-style:italic;color:var(--dim)}
+  .hosts-text p{color:var(--dim);font-size:16px;line-height:1.7;margin:0 0 16px}
+  .hosts-text p:last-child{margin-bottom:0}
   .house-bottom p{margin:0}
   .stars{color:var(--accent);letter-spacing:.05em}
   .house-links{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
@@ -355,6 +364,24 @@
       <p>All four homes are hosted personally by Pablo and Patricia. See photos, reviews and availability on each house's Airbnb page.</p>
     </div>
     <div id="houses-root"></div>
+  </section>
+
+  <!-- Hosts -->
+  <section class="hosts-section" id="hosts" aria-labelledby="hosts-title">
+    <div class="section-heading">
+      <div><p class="eyebrow">MEET YOUR HOSTS</p><h2 id="hosts-title">The family behind the houses</h2></div>
+      <p>We are Pablo, Patricia and Mariana, a family from Bogotá.</p>
+    </div>
+    <div class="hosts-grid">
+      <figure class="hosts-photo">
+        <img src="assets/hosts.jpg" alt="Pablo, Mariana and Patricia smiling together outdoors at sunset">
+        <figcaption>Pablo, Mariana and Patricia</figcaption>
+      </figure>
+      <div class="hosts-text">
+        <p>We opened our first home, Xia Xue, because we love this neighborhood and the people who come to discover it. Fagua is named for our daughter Mariana, and IeChie for the light that climbs through its three levels. Each name is a piece of who we are.</p>
+        <p>When you write to us, you talk to us directly, in English or Spanish. No company in between. We answer every message ourselves, and we welcome every guest as if they were coming to our own home.</p>
+      </div>
+    </div>
   </section>
 
   <!-- Book direct -->
