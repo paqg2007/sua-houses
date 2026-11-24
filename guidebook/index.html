@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<meta name="description" content="Walking La Candelaria, a guide by Pablo & Patricia. The places to visit and where to eat around our homes in historic Bogotá." />
+<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+<title>Walking La Candelaria — A guide by Pablo &amp; Patricia · Sua Houses</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    color-scheme: light dark;
+    --bg:#f4efe6; --surface:#fffaf0; --text:#18130f; --dim:#6f6255;
+    --border:#cbbba7; --accent:#9a7414; --gold:#d4af37; --gold-soft:#f3e5b8; --ink:#0b0b0b;
+    --blue:#0f5ca8; --rust:#a84a2a; --radius:4px;
+    --display:"Cormorant Garamond", Georgia, serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#0b0b0b; --surface:#17130f; --text:#f4efe6; --dim:#c7b9a6; --border:#4a4035; --accent:#d4af37; --gold-soft:#3d3113; }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+  a{-webkit-tap-highlight-color:transparent}
+  img{display:block;max-width:100%}
+  h1,h2,h3{font-family:var(--display)}
+  .eyebrow{margin:0 0 14px;letter-spacing:.18em;font-size:11px;font-weight:800;color:var(--accent)}
+
+  /* Top bar */
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:1260px;margin:0 auto;padding:16px 20px}
+  .topbar .brand{display:flex;align-items:center;gap:10px;color:var(--text);text-decoration:none;font-family:var(--display);font-size:24px;font-weight:600}
+  .topbar .brand img{width:32px;height:32px;border-radius:50%}
+  .topbar .back{color:var(--text);font-weight:700;font-size:14px;text-decoration:none}
+  .topbar .back:hover{text-decoration:underline}
+
+  /* Hero */
+  .hero{position:relative;display:grid;align-items:end;min-height:62svh;overflow:hidden;background:#100b08;color:#fff}
+  .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 55%}
+  .hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,5,3,.15) 4%,rgba(7,5,3,.35) 42%,rgba(7,5,3,.92) 100%)}
+  .hero-copy{position:relative;z-index:1;padding:24px 20px 48px;max-width:1260px;margin:0 auto;width:100%}
+  .hero-copy .eyebrow{color:#f3d47d}
+  .hero h1{margin:0;max-width:760px;font-size:clamp(52px,13vw,96px);line-height:.88;letter-spacing:-.04em;font-weight:600}
+  .hero h1 em{color:#f3d47d;font-weight:500}
+  .hero-copy>p:not(.eyebrow){max-width:600px;margin:22px 0 0;font-family:var(--display);font-size:22px;line-height:1.3}
+  .hero-jump{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+  .hero-jump a{display:inline-flex;align-items:center;min-height:44px;padding:11px 18px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.55);color:#fff;text-decoration:none;font-weight:700;font-size:14px}
+  .hero-jump a:hover{background:rgba(255,255,255,.26)}
+
+  /* Sections */
+  .guide-section{max-width:1260px;margin:0 auto;padding:64px 20px 10px}
+  .guide-section:last-of-type{padding-bottom:80px}
+  .section-heading{display:grid;gap:18px;margin-bottom:36px}
+  .section-heading h2{margin:0;font-size:clamp(42px,11vw,72px);line-height:.96;letter-spacing:-.035em;font-weight:600}
+  .section-heading>p{margin:0;max-width:560px;color:var(--dim);line-height:1.6}
+  .guide-grid{display:grid;grid-template-columns:1fr;gap:24px}
+  @media (min-width:640px){.guide-grid{grid-template-columns:repeat(2,1fr)}}
+  @media (min-width:1020px){.guide-grid{grid-template-columns:repeat(3,1fr)}}
+  .guide-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+  .guide-card img{width:100%;aspect-ratio:4/3;object-fit:cover}
+  .guide-card-body{padding:18px 20px 20px}
+  .guide-card h3{margin:0 0 8px;font-size:28px;line-height:1.05;font-weight:600}
+  .guide-card p{margin:0;color:var(--dim);font-size:15px;line-height:1.6}
+  .guide-note{margin-top:12px !important;font-size:12px !important;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:var(--accent) !important}
+  .guide-note a{color:var(--accent)}
+
+  /* Footer note */
+  .guide-foot{max-width:1260px;margin:0 auto;padding:0 20px 90px;text-align:center}
+  .guide-foot p{margin:0 auto;max-width:620px;color:var(--dim);line-height:1.65}
+  .guide-foot .home-link{display:inline-block;margin-top:22px;color:var(--text);font-weight:800;text-decoration:none}
+  .guide-foot .home-link:hover{text-decoration:underline}
+
+  /* WhatsApp float */
+  .wa-float{position:fixed;right:20px;bottom:20px;z-index:60;display:flex;align-items:center;gap:10px;background:#25d366;color:#fff;text-decoration:none;font-weight:700;font-size:15px;padding:13px 20px 13px 14px;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.25);transition:transform .15s ease,box-shadow .15s ease}
+  .wa-float:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.3)}
+  .wa-float svg{width:26px;height:26px;flex:none}
+  @media (max-width:520px){ .wa-float{padding:13px;right:16px;bottom:16px} .wa-float span{display:none} }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="../"><img src="../favicon-32x32.png" alt="">Sua Houses</a>
+  <a class="back" href="../">Back to Sua Houses <span aria-hidden="true">→</span></a>
+</header>
+
+<section class="hero">
+  <img src="photos/chorro-de-quevedo.jpg" alt="Chorro de Quevedo plaza in La Candelaria, Bogotá">
+  <div class="hero-shade"></div>
+  <div class="hero-copy">
+    <p class="eyebrow">A GUIDE BY PABLO &amp; PATRICIA</p>
+    <h1>Walking <em>La Candelaria</em></h1>
+    <p>The places we love around our homes, and where we like to eat. Everything here is on foot, or a short ride away.</p>
+    <div class="hero-jump">
+      <a href="#places">Tourist places</a>
+      <a href="#eat">Where to eat</a>
+    </div>
+  </div>
+</section>
+
+<section class="guide-section" id="places" aria-labelledby="places-title">
+  <div class="section-heading">
+    <div><p class="eyebrow">TOURIST PLACES</p><h2 id="places-title">Walk it, slowly</h2></div>
+    <p>Museums, squares, churches and markets, from our doorstep to a day trip out of town.</p>
+  </div>
+  <div class="guide-grid">
+    <article class="guide-card">
+      <img src="photos/chorro-de-quevedo.jpg" alt="Chorro de Quevedo plaza in La Candelaria, Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Plazoleta del Chorro de Quevedo</h3>
+        <p>Have a walk, listen to cuenteros, have some chicha and dinner in the local restaurants. El Chorro is surrounded by myths about the foundation of the city. This square used to be the border between the Spanish city, Pueblo Viejo, and the indigenous one, Thibsaquillo. El Chorro is one of the most iconic landmarks in Bogotá.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/santuario-nuestra-senora-del-carmen.jpg" alt="Santuario Nuestra Señora del Carmen church in Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Santuario Nuestra Señora del Carmen</h3>
+        <p>Gothic and Byzantine styles frame this catholic temple.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/museo-militar-de-colombia.jpg" alt="Military Museum of Colombia in Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Military Museum</h3>
+        <p>More than 200 years of Colombian military history.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/museo-botero.jpg" alt="The courtyard of Museo Botero in La Candelaria, Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Museo Botero</h3>
+        <p>This museum is home to the private art collection of our most famous artist, Fernando Botero, and several of his own works.</p>
+        <p class="guide-note">Free entrance</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/biblioteca-luis-angel-arango.jpg" alt="Luis Ángel Arango Library in Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Luis Ángel Arango Library</h3>
+        <p>The most important public library in Bogotá. It hosts different cultural activities such as concerts, expositions, workshops, and more.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/teatro-colon.jpg" alt="The gilded auditorium of Teatro Colón, Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Teatro Colón</h3>
+        <p>Appreciate neoclassic architecture in the most elegant theatre in Bogotá.</p>
+        <p class="guide-note"><a href="https://teatrocolon.gov.co/programacion" target="_blank" rel="noreferrer">Check the program</a></p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/museo-casa-de-moneda.jpg" alt="Mint Museum, Casa de Moneda, in Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Mint Museum</h3>
+        <p>A colonial house, home to the numismatic art collection of Bogotá.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/museo-colonial.jpg" alt="Museo Colonial facade in Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Museo Colonial</h3>
+        <p>Find collections of paintings, sculptures, textiles, silver, and furniture from colonial times.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/plaza-de-mercado-la-concordia.jpg" alt="La Concordia market hall in Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>La Concordia Market</h3>
+        <p>Renovated space from what used to be a real plaza de mercado. La Concordia is a good place to try chicha, guarapo, the Muisca alcoholic drinks, ajiaco, the potato soup from Bogotá, and lechona.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/plaza-de-bolivar.jpg" alt="Plaza de Bolívar with the Catedral Primada, Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Plaza de Bolívar</h3>
+        <p>The most important and emblematic landmark in Bogotá, Colombia. In our main square you will find some of the most important government buildings in town: Palacio de Justicia, Catedral Primada de Colombia, Capitolio Nacional, Palacio de Liévano, the Mayor's office, and Colegio de San Bartolomé. Feed the birds, pet llamas, and take pictures.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/museo-de-la-independencia-casa-del-florero.jpg" alt="Museo de la Independencia Casa del Florero in Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Museo de la Independencia Casa del Florero</h3>
+        <p>Visit the house where the Llorente vase incident, which sparked the protests that led to the Independence of Colombia on July 20, 1810, took place: the Museum of Independence, Flower Vase House, located in Bolívar Square. Here you can see about 2,000 objects related to the history of the country's independence.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/casa-de-narino.jpg" alt="Casa de Nariño, the presidential house, in Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Casa de Nariño</h3>
+        <p>House of the presidents of Colombia. Find it at Bolívar Square.</p>
+        <p class="guide-note"><a href="https://visitas.presidencia.gov.co/web/HouseNarino.aspx" target="_blank" rel="noreferrer">Book a tour</a></p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/museo-claustro-de-san-agustin.jpg" alt="Museo Claustro de San Agustín in Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Museo Claustro de San Agustín</h3>
+        <p>Now part of the National University of Colombia, this venue has museological collections.</p>
+        <p class="guide-note">Free entrance · Carrera 8 No. 7-21</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/pasaje-rivas.jpg" alt="Pasaje Rivas arcade in Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Pasaje Rivas</h3>
+        <p>The first Colombian mall was built in 1893. Here you can purchase handicrafts and baskets.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/museo-del-oro.jpg" alt="The Museo del Oro building in downtown Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Museo del Oro</h3>
+        <p>The museum you simply can't miss. Home to the most important archeological collections in Bogotá and the famous legend of El Dorado.</p>
+        <p class="guide-note">Free admission on Sundays</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/quinta-de-bolivar.jpg" alt="Quinta de Bolívar house museum in Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Quinta de Bolívar</h3>
+        <p>Simón Bolívar's country house at the foot of Monserrate, now a museum with gardens and views over the city.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/monserrate.jpg" alt="Monserrate church on the mountain above Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Monserrate</h3>
+        <p>Bogotá's mountain sanctuary, 3,152 meters above the city. Go up by cable car or funicular for the best view of the whole city.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/mercado-de-las-pulgas-san-alejo.jpg" alt="Mercado de las Pulgas San Alejo flea market in Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Mercado de las Pulgas San Alejo</h3>
+        <p>Bogotá's famous Sunday flea market, with antiques, handicrafts and vintage finds.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/torre-colpatria.jpg" alt="Torre Colpatria tower in Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Torre Colpatria</h3>
+        <p>Bogotá's tallest tower, with a viewpoint on the 48th floor and a light show on its facade at night.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/plaza-cultural-la-santamaria.jpg" alt="Plaza Cultural La Santamaría in Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Plaza Cultural La Santamaría</h3>
+        <p>The former bullring, now a cultural venue for concerts and events.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/museo-nacional-de-colombia.jpg" alt="Museo Nacional de Colombia in Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Museo Nacional</h3>
+        <p>Colombia's oldest museum, in a former prison, with art, history and archaeology under one roof.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/cementerio-central.jpg" alt="Cementerio Central in Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Cementerio Central</h3>
+        <p>Bogotá's oldest cemetery, an outdoor museum of sculpture and history.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/plaza-de-mercado-de-paloquemao.jpg" alt="Paloquemao Market in Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Paloquemao Market</h3>
+        <p>The city's biggest market, a feast of fruit, flowers and local food.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/jardin-botanico-de-bogota.jpg" alt="Jardín Botánico de Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Jardín Botánico de Bogotá</h3>
+        <p>Nineteen hectares of gardens, orchids and native plants, with a tropical rainforest dome.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/catedral-de-sal-de-zipaquira.jpg" alt="Catedral de Sal de Zipaquirá underground cathedral" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Catedral de Sal</h3>
+        <p>An underground cathedral carved inside a salt mine in Zipaquirá, an hour from Bogotá.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/mina-de-sal-de-nemocon.jpg" alt="Nemocón Salt Mine tunnels" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Nemocón Salt Mine</h3>
+        <p>A salt mine turned into a museum, with tunnels, mirrors of brine and a colonial town above.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/laguna-de-guatavita.jpg" alt="Lake Guatavita, the sacred lake of the El Dorado legend" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Lake Guatavita</h3>
+        <p>The sacred lake of the El Dorado legend, in the hills outside Bogotá.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="guide-section" id="eat" aria-labelledby="eat-title">
+  <div class="section-heading">
+    <div><p class="eyebrow">WHERE TO EAT</p><h2 id="eat-title">Come hungry</h2></div>
+    <p>Our favorite tables in La Candelaria, from ajiaco to French pastry.</p>
+  </div>
+  <div class="guide-grid">
+    <article class="guide-card">
+      <img src="photos/de-una-travel.jpg" alt="De Una Travel restaurant interior in La Candelaria, Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>De Una Travel</h3>
+        <p>A café restaurant on Calle 10, with food from the mountains and valleys of Colombia. Good for breakfast or a relaxed dinner.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/cafe-de-la-pena.jpg" alt="Café de la Peña pastry shop in Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Café de la Peña</h3>
+        <p>Be amazed at Amparito's French pastry recipes. You can also admire Natalia Pontón's art.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/restaurante-fulanitos-candelaria.jpg" alt="Restaurante Fulanitos facade in La Candelaria, Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Restaurante Fulanitos</h3>
+        <p>Vallecaucana cooking in the heart of La Candelaria.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/el-gato-gris.jpg" alt="Chorro de Quevedo plaza, home of El Gato Gris restaurant" loading="lazy">
+      <div class="guide-card-body">
+        <h3>El Gato Gris</h3>
+        <p>A classic of the Chorro de Quevedo square, with a terrace right on the plaza.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/la-bruja.jpg" alt="La Bruja restaurant stone facade in La Candelaria, Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>La Bruja</h3>
+        <p>A former monastery turned restaurant, with a witch theme, live music and international dishes in a bohemian colonial house.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/juan-valdez-parque-93.jpg" alt="Juan Valdez coffee store in Parque 93, Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Juan Valdez, Parque 93</h3>
+        <p>Colombia's coffee, at the flagship store in Parque 93.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/la-puerta-falsa.jpg" alt="La Puerta Falsa sweet shop window in Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>La Puerta Falsa</h3>
+        <p>Bogotá's oldest sweet shop, famous for its tamales, hot chocolate and traditional sweets.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/crepes-and-waffles-las-aguas.jpg" alt="Crepes at Crepes &amp; Waffles in Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Crepes &amp; Waffles, Las Aguas</h3>
+        <p>Crepes, waffles and ice cream, a Colombian classic, steps from the university district.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/bogota-beer-company.jpg" alt="Craft beer flight at Bogotá Beer Company" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Bogotá Beer Company</h3>
+        <p>Craft beer brewed in Bogotá.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/casa-vieja.jpg" alt="Casa Vieja restaurant colonial facade in Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Casa Vieja</h3>
+        <p>More than 40 years of tradition and one of the best ajiacos in Bogotá, in a colonial house on Avenida Jiménez. Save room for the postre de natas.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/casa-mama-luz.jpg" alt="Casa Mamá Luz restaurant facade in La Candelaria, Bogotá" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Casa Mamá Luz</h3>
+        <p>Mamá Luz won the prize for the best ajiaco in Bogotá. Caribbean and traditional cooking in a small house on Calle 10. Go for lunch and go early, the line forms fast.</p>
+      </div>
+    </article>
+    <article class="guide-card">
+      <img src="photos/capital-cocina-y-cafe.jpg" alt="A colorful street in La Candelaria, home of Capital Cocina y Café" loading="lazy">
+      <div class="guide-card-body">
+        <h3>Capital Cocina y Café</h3>
+        <p>A small family place with home cooking done with care: sourdough sandwiches, fresh salads and generous cuts. Good for breakfast too.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<footer class="guide-foot">
+  <p>Hours and prices change often. Check the official site before you go. And if you want a tip while you are here, write to us, we love to talk about our neighborhood.</p>
+  <a class="home-link" href="../">Back to Sua Houses <span aria-hidden="true">→</span></a>
+</footer>
+
+<a class="wa-float" href="https://wa.me/573015013948?text=Hi!%20I%20have%20a%20question%20about%20staying%20at%20Sua%20Houses." target="_blank" rel="noreferrer" aria-label="Chat with us on WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M12 2C6.5 2 2 6.5 2 12c0 1.9.6 3.7 1.6 5.2L2 22l4.9-1.5C8.4 21.4 10.1 22 12 22c5.5 0 10-4.5 10-10S17.5 2 12 2z"/><path fill="#25d366" transform="translate(6 6) scale(0.5)" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg><span>Chat with us</span></a>
+
+</body>
+</html>
