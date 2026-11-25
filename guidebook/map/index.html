@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Candelaria Walking Map · Sua Houses</title>
+<link rel="icon" href="../../favicon.ico">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  :root{
+    --bg:#0b0b0b; --surface:#17130f; --text:#f4efe6; --dim:#c9bfae;
+    --accent:#d4af37; --border:rgba(212,175,55,.35); --ink:#18130f;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;height:100%;background:var(--bg);color:var(--text);
+    font-family:Georgia,'Times New Roman',serif}
+  header{padding:18px 20px 14px;border-bottom:1px solid var(--border)}
+  header .eyebrow{margin:0 0 6px;color:var(--accent);font-size:12px;
+    letter-spacing:.22em;text-transform:uppercase;font-family:Arial,sans-serif}
+  header h1{margin:0;font-family:'Cormorant Garamond',Georgia,serif;
+    font-size:clamp(26px,5vw,40px);line-height:1.05;font-weight:600}
+  header p{margin:8px 0 0;color:var(--dim);font-size:15px;line-height:1.5}
+  header nav{margin-top:12px;font-family:Arial,sans-serif;font-size:14px}
+  header nav a{color:var(--accent);text-decoration:none;margin-right:18px}
+  header nav a:hover{text-decoration:underline}
+  #map{height:calc(100vh - 175px);min-height:420px;width:100%;background:#ddd}
+  .pin{display:flex;align-items:center;justify-content:center;width:34px;height:34px;
+    border-radius:50%;background:var(--accent);color:var(--ink);
+    font-family:Arial,sans-serif;font-weight:700;font-size:16px;
+    border:2.5px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.45)}
+  .home-pin{width:46px;height:46px;border-radius:50%;overflow:hidden;
+    border:3px solid var(--accent);box-shadow:0 1px 8px rgba(0,0,0,.5);background:#0b0b0b}
+  .home-pin img{width:100%;height:100%;object-fit:cover;display:block}
+  .leaflet-popup-content-wrapper{border-radius:10px}
+  .leaflet-popup-content{font-family:Georgia,serif;font-size:15px;line-height:1.45;
+    color:#18130f;margin:12px 14px}
+  .leaflet-popup-content b{font-size:16px}
+  .leaflet-popup-content a{color:#9a7414;font-weight:700}
+  footer{padding:12px 20px 18px;color:var(--dim);font-size:13px;
+    font-family:Arial,sans-serif}
+  footer a{color:var(--accent);text-decoration:none}
+  @media (prefers-color-scheme: light){
+    :root{--bg:#f4efe6; --surface:#fffaf0; --text:#18130f; --dim:#5c5344;
+      --accent:#9a7414; --border:rgba(154,116,20,.35)}
+  }
+</style>
+</head>
+<body>
+<header>
+  <p class="eyebrow">Sua Houses · Walking La Candelaria</p>
+  <h1>La Candelaria Walking Map</h1>
+  <p>Every place on foot from Xia Xue House, Carrera 2 #9-07. Tap a number to see how far it is. Pinch or scroll to zoom, right down to street level, with no pixelation.</p>
+  <nav>
+    <a href="../">&larr; Back to the guidebook</a>
+    <a href="la-candelaria-walking-map-hd.jpg" download>Download the printable map (JPG)</a>
+  </nav>
+</header>
+<div id="map"></div>
+<footer>Map data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap contributors</a> &middot; Distances measured from Xia Xue House &middot; <a href="../">Walking La Candelaria guide</a></footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+var HOME = [4.593746, -74.071955];
+var POINTS = [
+    {n: 1, label: "Pimienta & Café", lat: 4.594601, lon: -74.072775, text: "Walk · 171 m (0.11 mi) · about 2 min from Xia Xue House", maps: "https://www.google.com/maps/dir/?api=1&origin=Xia+Xue+House%2C+Carrera+2+9-07%2C+La+Candelaria%2C+Bogot%C3%A1%2C+Colombia&destination=Pimienta+%26+Caf%C3%A9%2C+Bogot%C3%A1%2C+Colombia&travelmode=walking"},
+    {n: 2, label: "Maria Candelaria", lat: 4.594514, lon: -74.073841, text: "Walk · 294 m (0.18 mi) · about 4 min from Xia Xue House", maps: "https://www.google.com/maps/dir/?api=1&origin=Xia+Xue+House%2C+Carrera+2+9-07%2C+La+Candelaria%2C+Bogot%C3%A1%2C+Colombia&destination=Maria+Candelaria%2C+Bogot%C3%A1%2C+Colombia&travelmode=walking"},
+    {n: 3, label: "Sitio Casa Candelaria", lat: 4.595780, lon: -74.070758, text: "Walk · 341 m (0.21 mi) · about 4 min from Xia Xue House", maps: "https://www.google.com/maps/dir/?api=1&origin=Xia+Xue+House%2C+Carrera+2+9-07%2C+La+Candelaria%2C+Bogot%C3%A1%2C+Colombia&destination=Sitio+Casa+Candelaria%2C+Bogot%C3%A1%2C+Colombia&travelmode=walking"},
+    {n: 4, label: "Museo Botero", lat: 4.596692, lon: -74.073085, text: "Walk · 456 m (0.28 mi) · about 6 min from Xia Xue House", maps: "https://www.google.com/maps/dir/?api=1&origin=Xia+Xue+House%2C+Carrera+2+9-07%2C+La+Candelaria%2C+Bogot%C3%A1%2C+Colombia&destination=Museo+Botero%2C+Bogot%C3%A1%2C+Colombia&travelmode=walking"},
+    {n: 5, label: "Tranvía", lat: 4.596921, lon: -74.073370, text: "Walk · 502 m (0.31 mi) · about 6 min from Xia Xue House", maps: "https://www.google.com/maps/dir/?api=1&origin=Xia+Xue+House%2C+Carrera+2+9-07%2C+La+Candelaria%2C+Bogot%C3%A1%2C+Colombia&destination=Tranv%C3%ADa+de+Bogot%C3%A1%2C+Bogot%C3%A1%2C+Colombia&travelmode=walking"},
+    {n: 6, label: "Luis Ángel Arango", lat: 4.597199, lon: -74.072912, text: "Walk · 518 m (0.32 mi) · about 6 min from Xia Xue House", maps: "https://www.google.com/maps/dir/?api=1&origin=Xia+Xue+House%2C+Carrera+2+9-07%2C+La+Candelaria%2C+Bogot%C3%A1%2C+Colombia&destination=Luis+%C3%81ngel+Arango+Library%2C+Bogot%C3%A1%2C+Colombia&travelmode=walking"},
+    {n: 7, label: "Teatro Colón", lat: 4.596677, lon: -74.074425, text: "Walk · 553 m (0.34 mi) · about 7 min from Xia Xue House", maps: "https://www.google.com/maps/dir/?api=1&origin=Xia+Xue+House%2C+Carrera+2+9-07%2C+La+Candelaria%2C+Bogot%C3%A1%2C+Colombia&destination=Teatro+Col%C3%B3n%2C+Bogot%C3%A1%2C+Colombia&travelmode=walking"},
+    {n: 8, label: "El Gato Gris", lat: 4.597038, lon: -74.069607, text: "Walk · 584 m (0.36 mi) · about 7 min from Xia Xue House", maps: "https://www.google.com/maps/dir/?api=1&origin=Xia+Xue+House%2C+Carrera+2+9-07%2C+La+Candelaria%2C+Bogot%C3%A1%2C+Colombia&destination=El+Gato+Gris%2C+Bogot%C3%A1%2C+Colombia&travelmode=walking"},
+    {n: 9, label: "Chorro de Quevedo", lat: 4.597234, lon: -74.069708, text: "Walk · 599 m (0.37 mi) · about 7 min from Xia Xue House", maps: "https://www.google.com/maps/dir/?api=1&origin=Xia+Xue+House%2C+Carrera+2+9-07%2C+La+Candelaria%2C+Bogot%C3%A1%2C+Colombia&destination=Plazoleta+del+Chorro+de+Quevedo%2C+Bogot%C3%A1%2C+Colombia&travelmode=walking"},
+    {n: 10, label: "Tejo Ancestral", lat: 4.598733, lon: -74.071265, text: "Walk · 728 m (0.45 mi) · about 9 min from Xia Xue House", maps: "https://www.google.com/maps/dir/?api=1&origin=Xia+Xue+House%2C+Carrera+2+9-07%2C+La+Candelaria%2C+Bogot%C3%A1%2C+Colombia&destination=Tejo+Ancestral%2C+Bogot%C3%A1%2C+Colombia&travelmode=walking"},
+    {n: 11, label: "Casa del Florero", lat: 4.598000, lon: -74.075600, text: "Walk · 809 m (0.50 mi) · about 10 min from Xia Xue House", maps: "https://www.google.com/maps/dir/?api=1&origin=Xia+Xue+House%2C+Carrera+2+9-07%2C+La+Candelaria%2C+Bogot%C3%A1%2C+Colombia&destination=Museo+de+la+Independencia+Casa+del+Florero%2C+Bogot%C3%A1%2C+Colombia&travelmode=walking"},
+    {n: 12, label: "Plaza de Bolívar", lat: 4.598169, lon: -74.076002, text: "Walk · 865 m (0.54 mi) · about 11 min from Xia Xue House", maps: "https://www.google.com/maps/dir/?api=1&origin=Xia+Xue+House%2C+Carrera+2+9-07%2C+La+Candelaria%2C+Bogot%C3%A1%2C+Colombia&destination=Plaza+de+Bol%C3%ADvar%2C+Bogot%C3%A1%2C+Colombia&travelmode=walking"},
+    {n: 13, label: "Museo del Oro", lat: 4.601840, lon: -74.071853, text: "Walk · 1.2 km (0.73 mi) · about 15 min from Xia Xue House", maps: "https://www.google.com/maps/dir/?api=1&origin=Xia+Xue+House%2C+Carrera+2+9-07%2C+La+Candelaria%2C+Bogot%C3%A1%2C+Colombia&destination=Museo+del+Oro%2C+Bogot%C3%A1%2C+Colombia&travelmode=walking"},
+    {n: 14, label: "Monserrate", lat: 4.602964, lon: -74.061926, text: "Walk · 2.0 km (1.22 mi) · about 25 min to the base station, then the funicular or cable car up", maps: "https://www.google.com/maps/dir/?api=1&origin=Xia+Xue+House%2C+Carrera+2+9-07%2C+La+Candelaria%2C+Bogot%C3%A1%2C+Colombia&destination=Monserrate%2C+Bogot%C3%A1%2C+Colombia&travelmode=walking"}
+];
+var map = L.map('map');
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+var bounds = [HOME];
+POINTS.forEach(function(p){
+  var icon = L.divIcon({className:'', html:'<div class="pin">'+p.n+'</div>',
+    iconSize:[34,34], iconAnchor:[17,17], popupAnchor:[0,-18]});
+  L.marker([p.lat, p.lon], {icon: icon}).addTo(map)
+    .bindPopup('<b>'+p.n+'. '+p.label+'</b><br>'+p.text+
+      '<br><a href="'+p.maps+'" target="_blank" rel="noreferrer">Open in Google Maps &rarr;</a>');
+  bounds.push([p.lat, p.lon]);
+});
+var homeIcon = L.divIcon({className:'', html:'<div class="home-pin"><img src="../../favicon.ico" alt="Sua Houses"></div>',
+  iconSize:[46,46], iconAnchor:[23,23], popupAnchor:[0,-24]});
+L.marker(HOME, {icon: homeIcon}).addTo(map)
+  .bindPopup('<b>Sua Houses &middot; Xia Xue House</b><br>Carrera 2 #9-07, La Candelaria<br>Home base for this map.');
+map.fitBounds(bounds, {padding:[30,30]});
+</script>
+</body>
+</html>
