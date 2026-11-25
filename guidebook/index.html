@@ -73,6 +73,20 @@
   .guide-meta a:hover{text-decoration:underline}
   .guide-foot p + p{margin-top:14px}
 
+  /* Hidden gems */
+  .hidden-feature{display:grid;gap:24px;margin-top:44px;align-items:center}
+  .hidden-feature:first-of-type{margin-top:8px}
+  .hidden-feature figure{margin:0;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+  .hidden-feature figure img{width:100%;aspect-ratio:4/3;object-fit:cover}
+  .hidden-feature h3{margin:0 0 12px;font-size:clamp(32px,6vw,44px);line-height:1.02;font-weight:600}
+  .hidden-feature p{margin:0 0 14px;color:var(--dim);line-height:1.65}
+  .hidden-feature .guide-meta{margin-top:18px !important}
+  @media (min-width:820px){
+    .hidden-feature{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:48px}
+    .hidden-feature.reverse figure{order:2}
+    .hidden-feature.reverse .hidden-copy{order:1}
+  }
+
   /* Zone hero */
   .zone-hero{margin:0 0 36px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
   .zone-hero img{width:100%;aspect-ratio:16/9;object-fit:cover}
@@ -109,6 +123,7 @@
     <div class="hero-jump">
       <a href="#places">Tourist places</a>
       <a href="#eat">Where to eat</a>
+      <a href="#hidden">Hidden gems</a>
       <a href="#macarena">Zona M, La Macarena</a>
     </div>
   </div>
@@ -533,6 +548,37 @@
       </div>
     </article>
   </div>
+</section>
+
+<section class="guide-section" id="hidden" aria-labelledby="hidden-title">
+  <div class="section-heading">
+    <div><p class="eyebrow">HIDDEN GEMS</p><h2 id="hidden-title">Two tables few tourists find</h2></div>
+    <p>Our two favorite hidden restaurants in La Candelaria, a short walk from the house. Homemade food, old rooms, and all the time in the world.</p>
+  </div>
+
+  <article class="hidden-feature">
+    <figure>
+      <img src="photos/pimienta-cafe.jpg" alt="A bowl of ajiaco santafereño, the signature dish at Pimienta and Café in La Candelaria, Bogotá" loading="lazy">
+    </figure>
+    <div class="hidden-copy">
+      <h3>Pimienta &amp; Café</h3>
+      <p>A small dining room in a colonial house on Carrera 3, run with energy and warmth by Miriam for more than 20 years. Walking in feels like entering someone's home, and the food tastes like it too. Lunch only, Monday to Saturday. On Sundays the door stays closed.</p>
+      <p>The ajiaco santafereño is what people come back for, creamy and generous, the way it should be. The chuleta valluna and the salmon in rosemary sauce are worth ordering too. Everything is homemade, portions are generous and prices are kind.</p>
+      <p class="guide-meta">Cra 3 #9-27 · Lunch Mon to Sat, closed Sun · COP 20,000 to 40,000 · Walk · 288 m (0.18 mi) · about 4 min · <a href="https://www.google.com/maps/dir/?api=1&amp;origin=Xia+Xue+House%2C+Carrera+2+9-07%2C+La+Candelaria%2C+Bogot%C3%A1%2C+Colombia&amp;destination=Pimienta+y+Caf%C3%A9%2C+Carrera+3+9-27%2C+La+Candelaria%2C+Bogot%C3%A1%2C+Colombia&amp;travelmode=walking" target="_blank" rel="noreferrer">Open in Google Maps →</a></p>
+    </div>
+  </article>
+
+  <article class="hidden-feature reverse">
+    <figure>
+      <img src="photos/maria-candelaria.jpg" alt="The green and red entrance of Maria Candelaria restaurant, Carrera 4 #8-58, La Candelaria, Bogotá" loading="lazy">
+    </figure>
+    <div class="hidden-copy">
+      <h3>Maria Candelaria</h3>
+      <p>A casona more than 300 years old, run by its owners María and José, who cook every order from scratch in a wood oven. Antique furniture and old family photographs fill rooms that have barely changed in centuries. Service is slow on purpose, so come with time, and book ahead if you are more than three. Cash only.</p>
+      <p>Start with a taste of the soups before you choose. The tomato soup and the onion soup are both worth trying. Then the stuffed chicken breast, with mushrooms or olives, or the ajiaco. Every main dish comes with soup, natural juice and a basket of bread on the house. Save room for the cuajada with hot melao, or the chocolate volcano.</p>
+      <p class="guide-meta">Cra 4 #8-58 · Lunch Wed to Sun, closed Mon and Tue · COP 20,000 to 40,000 · Cash only · Walk · 437 m (0.27 mi) · about 5 min · <a href="https://www.google.com/maps/dir/?api=1&amp;origin=Xia+Xue+House%2C+Carrera+2+9-07%2C+La+Candelaria%2C+Bogot%C3%A1%2C+Colombia&amp;destination=Maria+Candelaria%2C+Carrera+4+8-58%2C+La+Candelaria%2C+Bogot%C3%A1%2C+Colombia&amp;travelmode=walking" target="_blank" rel="noreferrer">Open in Google Maps →</a> · <a href="tel:+573154963920">Call to reserve</a></p>
+    </div>
+  </article>
 </section>
 
 <section class="guide-section" id="macarena" aria-labelledby="macarena-title">
