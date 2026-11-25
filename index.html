@@ -129,6 +129,7 @@
   .prop-pick{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
   .prop-pick button{flex:1;min-width:140px;border:1px solid var(--border);background:transparent;color:var(--text);border-radius:var(--radius);padding:12px 16px;cursor:pointer;font-family:var(--display);font-size:24px;font-weight:600}
   .prop-pick button.active{background:var(--gold);border-color:var(--gold);color:#15100a}
+  .prop-pick button img{width:28px;height:28px;border-radius:50%;background:#fff;object-fit:cover;vertical-align:middle;margin-right:9px}
   .booking-soon{margin:0;color:var(--dim);font-family:var(--display);font-size:22px;line-height:1.5;text-align:center;padding:18px 0 6px}
   .booking-prop-note{margin:0 0 16px;color:var(--dim);font-size:14px}
   .booking-grid{display:grid;gap:16px}
@@ -400,9 +401,9 @@
     </div>
     <div class="booking-panel">
       <div class="prop-pick" id="propPick" role="group" aria-label="Choose a house">
-        <button type="button" data-prop="xia-xue" class="active">Xia Xue</button>
-        <button type="button" data-prop="iechie">IeChie</button>
-        <button type="button" data-prop="centrico19">Céntrico19</button>
+        <button type="button" data-prop="xia-xue" class="active"><img src="assets/logo-xia-xue.jpg" alt="" aria-hidden="true">Xia Xue</button>
+        <button type="button" data-prop="iechie"><img src="assets/logo-iechie.jpg" alt="" aria-hidden="true">IeChie</button>
+        <button type="button" data-prop="centrico19"><img src="assets/logo-centrico19.jpg" alt="" aria-hidden="true">Céntrico19</button>
       </div>
       <p class="booking-soon" id="bookingSoon">Direct bookings open soon. In the meantime, you can book any house on Airbnb from its card above, or write to us on Instagram @suahouses with any question.</p>
       <p class="booking-soon" id="centricoSoon" hidden>Direct bookings for Céntrico19 open soon. In the meantime, you can <a class="text-link" href="https://www.airbnb.com/rooms/755309137894303486" target="_blank" rel="noreferrer">book Céntrico19 on Airbnb</a>, or write to us on Instagram @suahouses with any question.</p>
@@ -1113,6 +1114,7 @@ document.addEventListener("keydown", function(e){
       }, 15000).then(function(res){
         var data = res.data || {};
         if(data.ok && data.payment_url){
+          try{ sessionStorage.setItem("sua-property", prop); }catch(e){}
           window.location.href = data.payment_url;
           return;
         }

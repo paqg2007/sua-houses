@@ -12,6 +12,7 @@
   body{margin:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
   main{max-width:640px;margin:0 auto;padding:72px 20px 64px;text-align:center}
   .mark{width:72px;height:72px;margin:0 auto 24px;border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:34px}
+  .mark img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
   h1{font-family:var(--display);font-size:44px;line-height:1.1;margin:0 0 16px;font-weight:600}
   p{margin:0 0 14px;color:var(--dim);font-size:17px;line-height:1.65}
   p strong{color:var(--text)}
@@ -46,7 +47,24 @@
 <script>
 (function(){
   var status = new URLSearchParams(location.search).get("bold-tx-status");
-  if(!status || status === "approved"){ return; }
+  var approved = !status || status === "approved";
+  if(approved){
+    var LOGOS = {
+      "xia-xue": { src:"/assets/logo-xia-xue.jpg", name:"Xia Xue House" },
+      iechie: { src:"/assets/logo-iechie.jpg", name:"IeChie" },
+      centrico19: { src:"/assets/logo-centrico19.jpg", name:"Céntrico19" }
+    };
+    var booked = null;
+    try{ booked = sessionStorage.getItem("sua-property"); }catch(e){}
+    if(booked && LOGOS[booked]){
+      var mark = document.getElementById("thanksMark");
+      mark.textContent = "";
+      var img = document.createElement("img");
+      img.src = LOGOS[booked].src; img.alt = LOGOS[booked].name + " logo";
+      mark.appendChild(img);
+    }
+    return;
+  }
   document.getElementById("thanksMark").textContent = "!";
   document.getElementById("thanksTitle").textContent = "Payment not completed";
   document.getElementById("thanksLead").innerHTML = "<strong>Your payment did not go through.</strong>";
