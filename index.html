@@ -152,10 +152,7 @@
   .cal-day.is-past{opacity:.38}
   .cal-day.is-busy{color:var(--dim);text-decoration:line-through}
   .cal-day.is-today{box-shadow:inset 0 0 0 1.5px var(--gold)}
-  .cal-day.in-range{background:var(--gold-soft);border-radius:0}
-  .cal-day.is-start{background:var(--gold);color:#15100a;font-weight:700;text-decoration:none}
-  .cal-day.is-end{background:transparent;color:var(--gold);box-shadow:inset 0 0 0 1.5px var(--gold);font-weight:700;text-decoration:none}
-  .cal-day.is-checkout-ok{color:var(--text);text-decoration:none;box-shadow:inset 0 0 0 1.5px var(--gold)}
+  .cal-day.is-night{background:var(--gold);color:#15100a;font-weight:700;text-decoration:none}
   .cal-day:disabled{cursor:default}
   .cal-legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:16px;color:var(--dim);font-size:13px}
   .cal-legend i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
@@ -441,7 +438,7 @@
           <button type="button" data-cur="COP">COP</button>
         </div>
         <p class="currency-rate" id="bkFxRate" hidden></p>
-        <div class="quote-box" id="bkQuote"><p class="quote-msg">Select your dates to see the price.</p></div>
+        <div class="quote-box" id="bkQuote"><p class="quote-msg">Tap the nights you want to stay to see the price.</p></div>
         <div class="booking-grid two guest-details">
           <div class="booking-field"><label for="bkName">Full name</label><input type="text" id="bkName" autocomplete="name" placeholder="Your name" /></div>
           <div class="booking-field"><label for="bkEmail">Email</label><input type="email" id="bkEmail" autocomplete="email" placeholder="you@example.com" /></div>
@@ -799,30 +796,28 @@ document.addEventListener("keydown", function(e){
       return fmtDay(d);
     }
 
-    /* Calendar picker. Busy nights come from /availability (today to +12
-       months), reloaded per property. A busy date is a booked night: it can
-       never be a check-in, but it can be a check-out, since the checkout
-       day itself is not a night of the stay. The server still validates
-       every range at quote time. */
+    /* Calendar picker. The guest taps the NIGHTS they want to stay, one
+       tap per night; each tap is one night. Busy nights come from
+       /availability (today to +12 months), reloaded per property. A busy
+       night can never be selected. Check-out is always the morning after
+       the last selected night, at 11:00 a.m., and is never picked. The
+       server still validates every stay at quote time. */
     var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     var WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     var WEEKDAY_SHORT = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
     var busyByProp = {};
     var busySeq = 0;
     var calBase = (function(){ var n = new Date(); return { y: n.getFullYear(), m: n.getMonth() }; })();
-    var selIn = "", selOut = "";
+    var selNights = [];
 
     function busySet(){ return busyByProp[prop] || {}; }
     function isBusy(iso){ return !!busySet()[iso]; }
-    function firstBusyAfter(iso){
-      var d = addDays(iso, 1), end = addDays(iso, 370), busy = busySet();
-      while(d <= end){ if(busy[d]){ return d; } d = addDays(d, 1); }
-      return "";
-    }
-    function nightsClash(ci, co){
-      var d = ci, busy = busySet();
-      while(d < co){ if(busy[d]){ return true; } d = addDays(d, 1); }
-      return false;
+    function firstNight(){ return selNights.length ? selNights[0] : ""; }
+    function lastNight(){ return selNights.length ? selNights[selNights.length - 1] : ""; }
+    function checkoutDay(){ return selNights.length ? addDays(lastNight(), 1) : ""; }
+    function syncDateInputs(){
+      checkinEl.value = firstNight();
+      checkoutEl.value = checkoutDay();
     }
     function fmtLong(iso){
       var p = iso.split("-");
@@ -833,35 +828,18 @@ document.addEventListener("keydown", function(e){
       var d = new Date(+p[0], +p[1] - 1, +p[2]);
       return WEEKDAYS[d.getDay()] + ", " + fmtLong(iso);
     }
-    function nightCount(ci, co){
-      var n = 0, d = ci;
-      while(d < co){ n++; d = addDays(d, 1); }
-      return n;
-    }
-
-    function dayState(iso, today, limit){
+    function dayState(iso, today){
       var st = { disabled: false, cls: "", label: "" };
       if(iso < today){
         st.disabled = true; st.cls = " is-past"; st.label = ", past";
         return st;
       }
-      var busy = isBusy(iso);
-      if(!selIn || selOut){
-        if(busy){ st.disabled = true; st.cls = " is-busy"; st.label = ", booked"; }
+      if(isBusy(iso)){
+        st.disabled = true; st.cls = " is-busy"; st.label = ", booked";
         return st;
       }
-      if(iso <= selIn){
-        if(busy){ st.disabled = true; st.cls = " is-busy"; st.label = ", booked"; }
-        return st;
-      }
-      if(limit && iso > limit){
-        st.disabled = true;
-        if(busy){ st.cls = " is-busy"; st.label = ", booked"; }
-        else{ st.cls = " is-past"; st.label = ", unavailable"; }
-        return st;
-      }
-      if(busy){
-        st.cls = " is-busy is-checkout-ok"; st.label = ", booked, available as check-out";
+      if(selNights.indexOf(iso) !== -1){
+        st.cls = " is-night"; st.label = ", selected night";
         return st;
       }
       return st;
@@ -871,19 +849,15 @@ document.addEventListener("keydown", function(e){
       var daysInMonth = new Date(y, m + 1, 0).getDate();
       var offset = new Date(y, m, 1).getDay();
       var today = todayStr();
-      var limit = (selIn && !selOut) ? firstBusyAfter(selIn) : "";
       var html = '<div class="cal-month' + (second ? ' second' : '') + '"><h3>' + MONTHS[m] + ' ' + y + '</h3><div class="cal-grid">';
       WEEKDAY_SHORT.forEach(function(w){ html += '<div class="cal-weekday">' + w + '</div>'; });
       for(var i = 0; i < offset; i++){ html += '<span></span>'; }
       for(var d = 1; d <= daysInMonth; d++){
         var iso = y + "-" + String(m + 1).padStart(2, "0") + "-" + String(d).padStart(2, "0");
-        var st = dayState(iso, today, limit);
+        var st = dayState(iso, today);
         var cls = "cal-day" + st.cls;
         var label = fmtAria(iso) + st.label;
         if(iso === today){ cls += " is-today"; label += ", today"; }
-        if(iso === selIn){ cls += " is-start"; label += ", selected as check-in"; }
-        if(iso === selOut){ cls += " is-end"; label += ", selected as check-out"; }
-        if(selIn && selOut && iso > selIn && iso < selOut){ cls += " in-range"; }
         html += '<button type="button" class="' + cls + '" data-date="' + iso + '" aria-label="' + label + '"' + (st.disabled ? ' disabled' : '') + '>' + d + '</button>';
       }
       html += '</div></div>';
@@ -891,15 +865,14 @@ document.addEventListener("keydown", function(e){
     }
 
     function updateSummary(){
-      if(!selIn){
-        calSummaryEl.textContent = "Select your check-in date.";
-      }else if(!selOut){
-        calSummaryEl.textContent = "Check-in " + fmtLong(selIn) + ". Now select your check-out date.";
+      if(!selNights.length){
+        calSummaryEl.textContent = "Tap the nights you want to stay.";
       }else{
-        var n = nightCount(selIn, selOut);
-        calSummaryEl.textContent = "Check-in " + fmtLong(selIn) + ". Check-out " + fmtLong(selOut) + ". " + n + (n === 1 ? " night." : " nights.");
+        var n = selNights.length;
+        var range = (n === 1) ? fmtLong(selNights[0]) : fmtLong(selNights[0]) + " to " + fmtLong(selNights[n - 1]);
+        calSummaryEl.textContent = n + (n === 1 ? " night: " : " nights: ") + range + ". Check-out " + fmtLong(checkoutDay()) + " at 11:00 a.m.";
       }
-      calClearBtn.hidden = !selIn;
+      calClearBtn.hidden = !selNights.length;
     }
 
     function renderCalendar(){
@@ -928,31 +901,32 @@ document.addEventListener("keydown", function(e){
     }
 
     function clearDates(){
-      selIn = ""; selOut = "";
-      checkinEl.value = ""; checkoutEl.value = "";
+      selNights = [];
+      syncDateInputs();
       clearQuote();
       renderCalendar();
     }
 
     function onDayClick(iso){
       if(iso < todayStr()){ return; }
-      if(!selIn || selOut || iso <= selIn){
-        if(isBusy(iso)){ return; }
-        selIn = iso; selOut = "";
-        checkinEl.value = iso; checkoutEl.value = "";
-        clearQuote();
-        renderCalendar();
-        return;
+      if(isBusy(iso)){ return; }
+      var i = selNights.indexOf(iso);
+      if(i !== -1){
+        if(selNights.length === 1){ selNights = []; }
+        else if(i === 0 || i === selNights.length - 1){ selNights.splice(i, 1); }
+        else { return; }
+      }else if(!selNights.length){
+        selNights = [iso];
+      }else if(iso === addDays(selNights[0], -1)){
+        selNights.unshift(iso);
+      }else if(iso === addDays(selNights[selNights.length - 1], 1)){
+        selNights.push(iso);
+      }else{
+        selNights = [iso];
       }
-      if(nightsClash(selIn, iso)){
-        quoteError("Some of those nights are already booked. Please choose different dates.");
-        renderCalendar();
-        return;
-      }
-      selOut = iso;
-      checkoutEl.value = iso;
+      syncDateInputs();
       renderCalendar();
-      requestQuote();
+      if(selNights.length){ requestQuote(); } else { clearQuote(); }
     }
 
     function fetchJSON(url, opts, timeoutMs){
@@ -1011,7 +985,7 @@ document.addEventListener("keydown", function(e){
     function clearQuote(){
       lastQuote = null;
       payBtn.disabled = true;
-      quoteBox.innerHTML = '<p class="quote-msg">Select your dates to see the price.</p>';
+      quoteBox.innerHTML = '<p class="quote-msg">Tap the nights you want to stay to see the price.</p>';
     }
     function quoteError(msg){
       lastQuote = null;
