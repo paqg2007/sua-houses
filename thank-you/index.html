@@ -54,14 +54,42 @@
       iechie: { src:"/assets/logo-iechie.jpg", name:"IeChie" },
       centrico19: { src:"/assets/logo-centrico19.jpg", name:"Céntrico19" }
     };
-    var booked = null;
-    try{ booked = sessionStorage.getItem("sua-property"); }catch(e){}
+    var CHECKIN = {
+      "xia-xue": "https://paqg2007.github.io/sua-checkin/xia-xue/",
+      iechie: "https://paqg2007.github.io/sua-checkin/iechie/",
+      centrico19: "https://paqg2007.github.io/sua-checkin/centrico19/"
+    };
+    var booked = null, details = null;
+    try{
+      booked = sessionStorage.getItem("sua-property");
+      details = JSON.parse(sessionStorage.getItem("sua-booking") || "null");
+    }catch(e){}
     if(booked && LOGOS[booked]){
       var mark = document.getElementById("thanksMark");
       mark.textContent = "";
       var img = document.createElement("img");
       img.src = LOGOS[booked].src; img.alt = LOGOS[booked].name + " logo";
       mark.appendChild(img);
+    }
+    if(details && LOGOS[details.property]){
+      var fmt = function(iso){ var p = (iso || "").split("-"); return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : iso; };
+      var propName = LOGOS[details.property].name;
+      document.getElementById("thanksTitle").textContent = "Welcome to " + propName + "!";
+      document.getElementById("thanksLead").innerHTML = "<strong>Your booking is confirmed.</strong> Reference " + details.reference + ".";
+      document.getElementById("thanksSub").textContent = "Here is your booking summary and the check-in form every guest needs to complete.";
+      var card = document.getElementById("nextCard");
+      var html = "<h2>Your stay</h2><ul>"
+        + "<li>Check-in: " + fmt(details.checkin) + "</li>"
+        + "<li>Check-out: " + fmt(details.checkout) + " by 11:00 a.m.</li>"
+        + "<li>Guests: " + details.guests + "</li>"
+        + "<li>Reference: " + details.reference + "</li>"
+        + "</ul>"
+        + "<p style=\"color:var(--dim);font-size:15px;line-height:1.6\">Colombian law requires every guest to register. Please complete the check-in form now, it takes about two minutes.</p>"
+        + "<a class=\"btn\" href=\"" + CHECKIN[details.property] + "\">Complete your check-in</a>";
+      if(details.property === "centrico19"){
+        html += "<p style=\"color:var(--dim);font-size:15px;line-height:1.6;margin-top:14px\">Entry instructions will be shared one day before your arrival.</p>";
+      }
+      card.innerHTML = html;
     }
     return;
   }

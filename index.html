@@ -1130,6 +1130,7 @@ document.addEventListener("keydown", function(e){
       payBtn.disabled = true;
       var original = payBtn.textContent;
       payBtn.textContent = "Preparing secure payment…";
+      var ref = makeReference();
       fetchJSON(API + "/create-payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -1139,12 +1140,20 @@ document.addEventListener("keydown", function(e){
           guests: parseInt(guestsEl.value, 10) || 1,
           total_cop: Math.round(lastQuote.total),
           name: name, email: email, phone: phone,
-          reference: makeReference()
+          reference: ref
         })
       }, 15000).then(function(res){
         var data = res.data || {};
         if(data.ok && data.payment_url){
-          try{ sessionStorage.setItem("sua-property", prop); }catch(e){}
+          try{
+            sessionStorage.setItem("sua-property", prop);
+            sessionStorage.setItem("sua-booking", JSON.stringify({
+              property: prop, name: name, email: email,
+              checkin: checkinEl.value, checkout: checkoutEl.value,
+              guests: parseInt(guestsEl.value, 10) || 1,
+              reference: ref
+            }));
+          }catch(e){}
           window.location.href = data.payment_url;
           return;
         }
