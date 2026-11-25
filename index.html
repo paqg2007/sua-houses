@@ -66,6 +66,7 @@
   .names-intro{margin:0 auto;max-width:700px;color:var(--dim);font-family:var(--display);font-size:23px;line-height:1.5}
   .names-grid{display:grid;grid-template-columns:1fr;gap:34px;text-align:left}
   .name-card h3{margin:0 0 6px;font-family:var(--display);font-size:34px;font-weight:600;line-height:1}
+  .name-mark{display:block;width:76px;height:76px;object-fit:cover;border-radius:50%;background:#fff;margin:16px 0 12px}
   .name-meaning{margin:0 0 12px;letter-spacing:.14em;font-size:11px;font-weight:800;text-transform:uppercase;color:var(--accent)}
   .name-card p:last-child{margin:0;color:var(--dim);line-height:1.65;font-size:15px}
   .names-closing{margin:0;font-family:var(--display);font-size:26px}
@@ -98,6 +99,7 @@
   .house-copy{align-self:center}
   .house-number{margin:0 0 14px;letter-spacing:.18em;font-size:11px;font-weight:800;color:var(--accent)}
   .house-copy h3{margin:0;font-size:clamp(46px,12vw,76px);line-height:.9;letter-spacing:-.04em}
+  .house-logo{display:block;width:64px;height:64px;object-fit:cover;border-radius:50%;background:#fff;margin:18px 0 6px}
   .house-phrase{margin:10px 0 22px;color:var(--rust);font-family:var(--display);font-size:24px;font-style:italic}
   @media (prefers-color-scheme: dark){ .house-phrase{color:#e08a63} }
   .house-description{color:var(--dim);font-size:16px;line-height:1.7;margin:0}
@@ -343,16 +345,19 @@
     <div class="names-grid">
       <div class="name-card">
         <h3>Xia Xue</h3>
+        <img class="name-mark" src="assets/logo-xia-xue.jpg" alt="Xia Xue House logo: the sun and the moon" width="76" height="76" loading="lazy">
         <p class="name-meaning">The sun and the moon</p>
         <p>Our first home, named for Sué, the sun god, and Chía, the moon goddess, husband and wife in Muisca myth, who follow each other across the sky. Pablo is the sun. Patricia is the moon. The name itself holds them both: Xia for Chía, Xue for Xué, another name of Sué.</p>
       </div>
       <div class="name-card">
         <h3>Fagua</h3>
+        <img class="name-mark" src="assets/logo-fagua.jpg" alt="Fagua logo: the star" width="76" height="76" loading="lazy">
         <p class="name-meaning">The star</p>
         <p>Fagua means "star" in Muysccubun, the language of the Muisca. It is named for our daughter Mariana, the star of the family.</p>
       </div>
       <div class="name-card">
         <h3>IeChie</h3>
+        <img class="name-mark" src="assets/logo-iechie.jpg" alt="IeChie logo: the path to the light" width="76" height="76" loading="lazy">
         <p class="name-meaning">The path to the light</p>
         <p>A house of three levels that climb toward the light. At the top, a window opens onto the rooftops of La Candelaria.</p>
       </div>
@@ -553,7 +558,7 @@
 <script>
 var HOUSES = [
   {
-    id:"xia-xue", number:"01", name:"Xia Xue House", phrase:"A cozy, romantic, rustic retreat.", bookable:true,
+    id:"xia-xue", number:"01", name:"Xia Xue House", phrase:"A cozy, romantic, rustic retreat.", bookable:true, logo:"assets/logo-xia-xue.jpg",
     description:"Our first home. A sunlit apartment with a wood fireplace, a warm farmhouse kitchen and access to a rooftop terrace with a 360-degree view over La Candelaria, Monserrate and Guadalupe.",
     guests:4, bedrooms:2, baths:2, rating:"4.95", reviews:343,
     amenities:["Wood fireplace","Washer and dryer","Free parking by request","Shared rooftop terrace","Pet friendly","Fast Wi-Fi and workspace"],
@@ -562,7 +567,7 @@ var HOUSES = [
     airbnb:"https://www.airbnb.com/rooms/53834830"
   },
   {
-    id:"fagua", number:"02", name:"Fagua", phrase:"A bohemian colonial loft.",
+    id:"fagua", number:"02", name:"Fagua", phrase:"A bohemian colonial loft.", logo:"assets/logo-fagua.jpg",
     description:"A generous loft inside a century-old house, arranged across three levels. Soaring ceilings, a real wood fireplace in colorful tile and an indoor hammock give it an unmistakable character.",
     guests:5, bedrooms:2, baths:1, rating:"5.0", reviews:80,
     amenities:["Real wood fireplace","Indoor hammock","Mosaic kitchen","Walk-in shower","Private balcony","Quiet central setting"],
@@ -571,7 +576,7 @@ var HOUSES = [
     airbnb:"https://www.airbnb.com/rooms/1548849428183932969"
   },
   {
-    id:"iechie", number:"03", name:"IeChie", phrase:"The road to light.", bookable:true,
+    id:"iechie", number:"03", name:"IeChie", phrase:"The road to light.", bookable:true, logo:"assets/logo-iechie.jpg",
     description:"Three private levels inside a 200-year-old colonial house near Chorro de Quevedo. Move from the social living room to a reading loft, then to a top-floor sanctuary beneath the roof beams.",
     guests:6, bedrooms:2, baths:2, rating:"5.0", reviews:15,
     amenities:["Three private levels","Balcony with hammock","Full kitchen","Shared colonial patios","24-hour security","Fast Wi-Fi and workspace"],
@@ -580,7 +585,7 @@ var HOUSES = [
     airbnb:"https://www.airbnb.com/rooms/1725785742317243773"
   },
   {
-    id:"centrico19", number:"04", name:"Céntrico19", phrase:"A hammock in the sky.", bookable:true,
+    id:"centrico19", number:"04", name:"Céntrico19", phrase:"A hammock in the sky.", bookable:true, logo:"assets/logo-centrico19.jpg",
     description:"A loft on the eleventh floor, in the heart of Bogotá. A brick living room, an indoor hammock and the tree-lined Eje Ambiental right below. Room for four, with a washer and dryer and a big screen for movie nights.",
     guests:4, bedrooms:1, baths:1, rating:"4.86", reviews:203,
     amenities:["Indoor hammock","Washer and dryer","Big screen TV","Brick living room","Fast Wi-Fi","Steps from Eje Ambiental"],
@@ -633,6 +638,7 @@ HOUSES.forEach(function(house, hi){
   copy.innerHTML =
     '<p class="house-number">HOUSE ' + house.number + '</p>' +
     '<h3>' + house.name + '</h3>' +
+    (house.logo ? '<img class="house-logo" src="' + house.logo + '" alt="' + house.name + ' logo" loading="lazy">' : '') +
     '<p class="house-phrase">' + house.phrase + '</p>' +
     '<p class="house-description">' + house.description + '</p>' +
     '<div class="facts" aria-label="' + house.name + ' capacity">' +
