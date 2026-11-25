@@ -163,6 +163,11 @@
   .cal-legend .lg-today{background:transparent;box-shadow:inset 0 0 0 1.5px var(--gold)}
   .cal-month.second{display:none}
   .quote-box{border-top:1px solid var(--border);padding-top:16px;margin-top:20px}
+  .currency-pick{display:flex;align-items:center;gap:8px;margin:2px 0 12px;font-size:14px;color:var(--dim)}
+  .currency-pick button{border:1px solid var(--border);background:transparent;color:var(--text);border-radius:999px;padding:6px 14px;cursor:pointer;font-size:14px;font-weight:600}
+  .currency-pick button.active{background:var(--gold);border-color:var(--gold);color:#15100a}
+  .currency-rate{color:var(--dim);font-size:13px;margin:-4px 0 12px}
+  .quote-rate{color:var(--dim);font-size:13px;line-height:1.5;margin-top:10px}
   .quote-line{display:flex;justify-content:space-between;gap:16px;padding:5px 0;color:var(--dim);font-size:15px}
   .quote-line.total{border-top:1px solid var(--border);margin-top:10px;padding-top:12px;color:var(--text);font-family:var(--display);font-size:26px;font-weight:600}
   .quote-msg{color:var(--dim);font-size:15px;line-height:1.6;margin:0}
@@ -429,6 +434,12 @@
         <div class="booking-grid">
           <div class="booking-field"><label for="bkGuests">Guests</label><select id="bkGuests"></select></div>
         </div>
+        <div class="currency-pick" role="group" aria-label="Currency">
+          <span>Show prices in</span>
+          <button type="button" data-cur="USD" class="active">USD</button>
+          <button type="button" data-cur="COP">COP</button>
+        </div>
+        <p class="currency-rate" id="bkFxRate" hidden></p>
         <div class="quote-box" id="bkQuote"><p class="quote-msg">Select your dates to see the price.</p></div>
         <div class="booking-grid two guest-details">
           <div class="booking-field"><label for="bkName">Full name</label><input type="text" id="bkName" autocomplete="name" placeholder="Your name" /></div>
@@ -734,10 +745,19 @@ document.addEventListener("keydown", function(e){
     var lastQuote = null;
     var quoteSeq = 0;
 
+    /* Prices are shown in USD by default, with a COP toggle. The rate
+       (COP per 1 USD) comes from the booking service (/fx, then each
+       quote's fx block). The charge itself is always processed in COP
+       by Bold; the dollar total is an estimate. */
+    var currency = "USD";
+    try{ var savedCur = localStorage.getItem("sua-currency"); if(savedCur === "COP" || savedCur === "USD"){ currency = savedCur; } }catch(e){}
+    var fxRate = 3516.05, fxAsOf = "";
+
     function el(id){ return document.getElementById(id); }
     var soonBox = el("bookingSoon"), centricoBox = el("centricoSoon"), form = el("bookingForm");
     var checkinEl = el("bkCheckin"), checkoutEl = el("bkCheckout"), guestsEl = el("bkGuests");
     var quoteBox = el("bkQuote"), propNote = el("bkPropNote");
+    var fxRateEl = el("bkFxRate");
     var nameEl = el("bkName"), emailEl = el("bkEmail"), phoneEl = el("bkPhone");
     var payBtn = el("bkPay"), payNote = el("bkPayNote");
     var calMonthsEl = el("bkCalMonths"), calSummaryEl = el("bkCalSummary");
@@ -745,6 +765,30 @@ document.addEventListener("keydown", function(e){
     if(!soonBox || !form || !checkinEl || !payBtn || !calMonthsEl || !calSummaryEl || !calPrevBtn || !calNextBtn || !calClearBtn){ return; }
 
     function fmtCOP(n){ return "COP " + Math.round(n).toLocaleString("en-US"); }
+    function fmtUSD(n){ return "$" + Number(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    function fmtFxDate(s){
+      var p = String(s || "").split("-");
+      if(p.length !== 3){ return ""; }
+      var mon = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      return mon[+p[1] - 1] + " " + (+p[2]) + ", " + p[0];
+    }
+    function updateFxLabel(){
+      if(!fxRateEl){ return; }
+      if(!fxRate){ fxRateEl.hidden = true; return; }
+      var t = "Rate: 1 USD ≈ " + Math.round(fxRate).toLocaleString("en-US") + " COP";
+      if(fxAsOf){ t += " (" + fmtFxDate(fxAsOf) + ")"; }
+      fxRateEl.textContent = t + ".";
+      fxRateEl.hidden = false;
+    }
+    function setCurrency(c){
+      if(c !== "USD" && c !== "COP"){ return; }
+      currency = c;
+      try{ localStorage.setItem("sua-currency", c); }catch(e){}
+      document.querySelectorAll(".currency-pick button").forEach(function(b){
+        b.classList.toggle("active", b.getAttribute("data-cur") === c);
+      });
+      if(lastQuote){ renderQuote(lastQuote); }
+    }
     function fmtDay(d){ return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
     function todayStr(){ return fmtDay(new Date()); }
     function addDays(iso, n){
@@ -1012,18 +1056,27 @@ document.addEventListener("keydown", function(e){
     }
 
     function renderQuote(q){
+      if(q.fx && q.fx.rate){ fxRate = q.fx.rate; fxAsOf = q.fx.as_of || fxAsOf; updateFxLabel(); }
+      var usd = (currency === "USD" && q.usd) ? q.usd : null;
+      var a = usd || q;
+      var fmt = usd ? fmtUSD : fmtCOP;
       var sameRate = true;
-      var first = (q.nightly && q.nightly.length) ? q.nightly[0].rate : null;
-      (q.nightly || []).forEach(function(n){ if(n.rate !== first){ sameRate = false; } });
+      var first = (a.nightly && a.nightly.length) ? a.nightly[0].rate : null;
+      (a.nightly || []).forEach(function(n){ if(n.rate !== first){ sameRate = false; } });
       var nightsLabel = q.nights + (q.nights === 1 ? " night" : " nights");
-      if(sameRate && first !== null){ nightsLabel += " × " + fmtCOP(first); }
-      var html = '<div class="quote-line"><span>' + nightsLabel + '</span><span>' + fmtCOP(q.subtotal) + '</span></div>';
-      if(q.cleaning > 0){ html += '<div class="quote-line"><span>Cleaning fee</span><span>' + fmtCOP(q.cleaning) + '</span></div>'; }
-      if(q.extra_guest_total > 0){
-        html += '<div class="quote-line"><span>' + q.extra_guests + (q.extra_guests === 1 ? " extra guest" : " extra guests") + '</span><span>' + fmtCOP(q.extra_guest_total) + '</span></div>';
+      if(sameRate && first !== null){ nightsLabel += " × " + fmt(first); }
+      var html = '<div class="quote-line"><span>' + nightsLabel + '</span><span>' + fmt(a.subtotal) + '</span></div>';
+      if(a.cleaning > 0){ html += '<div class="quote-line"><span>Cleaning fee</span><span>' + fmt(a.cleaning) + '</span></div>'; }
+      if(a.extra_guest_total > 0){
+        html += '<div class="quote-line"><span>' + q.extra_guests + (q.extra_guests === 1 ? " extra guest" : " extra guests") + '</span><span>' + fmt(a.extra_guest_total) + '</span></div>';
       }
-      if(q.discount > 0){ html += '<div class="quote-line"><span>Long stay discount</span><span>−' + fmtCOP(q.discount) + '</span></div>'; }
-      html += '<div class="quote-line total"><span>Total</span><span>' + fmtCOP(q.total) + '</span></div>';
+      if(a.discount > 0){ html += '<div class="quote-line"><span>Long stay discount</span><span>−' + fmt(a.discount) + '</span></div>'; }
+      html += '<div class="quote-line total"><span>Total</span><span>' + fmt(a.total) + '</span></div>';
+      if(usd){
+        html += '<div class="quote-rate">Rate 1 USD ≈ ' + Math.round(fxRate).toLocaleString("en-US") + ' COP' + (fxAsOf ? ' (' + fmtFxDate(fxAsOf) + ')' : '') + '. You will be charged in Colombian pesos; the dollar total is an estimate.</div>';
+      } else {
+        html += '<div class="quote-rate">You will be charged in Colombian pesos (COP).</div>';
+      }
       quoteBox.innerHTML = html;
     }
 
@@ -1157,6 +1210,9 @@ document.addEventListener("keydown", function(e){
     document.querySelectorAll("#propPick button").forEach(function(b){
       b.addEventListener("click", function(){ selectProp(b.getAttribute("data-prop")); });
     });
+    document.querySelectorAll(".currency-pick button").forEach(function(b){
+      b.addEventListener("click", function(){ setCurrency(b.getAttribute("data-cur")); });
+    });
     document.addEventListener("click", function(e){
       var t = (e.target && e.target.closest) ? e.target.closest("a[data-book]") : null;
       if(!t){ return; }
@@ -1179,6 +1235,12 @@ document.addEventListener("keydown", function(e){
     };
 
     selectProp("xia-xue");
+    document.querySelectorAll(".currency-pick button").forEach(function(b){
+      b.classList.toggle("active", b.getAttribute("data-cur") === currency);
+    });
+    fetchJSON(API + "/fx", null, 8000).then(function(res){
+      if(res.data && res.data.ok && res.data.rate){ fxRate = res.data.rate; fxAsOf = res.data.as_of || ""; updateFxLabel(); }
+    }).catch(function(){});
     fetchJSON(API + "/health", null, 8000).then(function(res){
       health = res.data || null;
       refreshPanel();
