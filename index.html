@@ -293,6 +293,7 @@
   }
   @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none !important} }
 </style>
+<script async src="https://analytics.suahouses.com/script.js" data-website-id="8a4c619f-8a28-4b06-bf31-2de2122bc720"></script>
 </head>
 <body>
 
@@ -1177,6 +1178,7 @@ document.addEventListener("keydown", function(e){
         return;
       }
       payNote.textContent = "";
+      if(window.umami){ try{ window.umami.track("booking-started"); }catch(e){} }
       payBtn.disabled = true;
       var original = payBtn.textContent;
       payBtn.textContent = "Preparing secure payment…";

@@ -26,6 +26,7 @@
   .wa-float svg{width:26px;height:26px;flex:none}
   @media (max-width:520px){ .wa-float{padding:13px;right:16px;bottom:16px} .wa-float span{display:none} main{padding-top:48px} h1{font-size:36px} }
 </style>
+<script async src="https://analytics.suahouses.com/script.js" data-website-id="8a4c619f-8a28-4b06-bf31-2de2122bc720"></script>
 </head>
 <body>
 <main>
@@ -49,6 +50,7 @@
   var status = new URLSearchParams(location.search).get("bold-tx-status");
   var approved = !status || status === "approved";
   if(approved){
+    if(status === "approved" && window.umami){ try{ window.umami.track("booking-completed"); }catch(e){} }
     var LOGOS = {
       "xia-xue": { src:"/assets/logo-xia-xue.jpg", name:"Xia Xue House" },
       iechie: { src:"/assets/logo-iechie.jpg", name:"IeChie" },
