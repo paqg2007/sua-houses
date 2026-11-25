@@ -200,6 +200,12 @@
   .review-ledger strong{font-family:var(--display);font-size:30px;color:var(--accent)}
   .review-ledger small{color:var(--dim)}
   .review-ledger b{grid-column:2;grid-row:2;color:var(--dim)}
+  .review-quotes{margin-top:56px;text-align:left}
+  .review-group{margin-top:44px}
+  .review-group h3{margin:0 0 18px;font-family:var(--display);font-size:30px;font-weight:600}
+  .review-quote{margin:0 0 18px;padding:20px 22px;border:1px solid var(--border);border-radius:14px;background:var(--surface)}
+  .review-quote p{margin:0;font-family:var(--display);font-size:22px;line-height:1.45}
+  .review-quote footer{margin-top:12px;font-size:13px;letter-spacing:.04em;color:var(--dim)}
 
   /* Neighborhood */
   .neighborhood{display:grid;gap:38px;max-width:1260px;margin:0 auto;padding:70px 20px}
@@ -468,6 +474,7 @@
     <p class="eyebrow">GUEST REVIEWS</p>
     <h2 id="reviews-title">A reputation built one stay at a time.</h2>
     <div class="review-ledger" id="reviews-root"></div>
+    <div class="review-quotes" id="quotes-root"></div>
   </section>
 
   <!-- Neighborhood -->
@@ -576,7 +583,12 @@ var HOUSES = [
     amenities:["Wood fireplace","Washer and dryer","Free parking by request","Shared rooftop terrace","Pet friendly","Fast Wi-Fi and workspace"],
     images:["01","04","09","19","24","32","41","45","51","52","61","05"],
     alts:["Xia Xue House sunlit living room","Xia Xue House fireplace","Xia Xue House kitchen","Xia Xue House dining nook","Xia Xue House first bedroom","Xia Xue House second bedroom","Xia Xue House bathroom","Xia Xue House balcony","El Quijote colonial courtyard","Xia Xue House building","Shared rooftop terrace over La Candelaria","Colorful La Candelaria street"],
-    airbnb:"https://www.airbnb.com/rooms/53834830"
+    airbnb:"https://www.airbnb.com/rooms/53834830",
+    quotes:[
+      {q:"Me encantó el lugar, es muy limpio y ordenado, es tan acogedor que te hace sentir en casa; está ubicado en una buena zona para salir a caminar y además hay varios museos y restaurantes cercanos", by:"Geanella", from:"Ecuador", when:"October 2026"},
+      {q:"Hermoso apartamento, tanto los anfitiones cómo la vigilancia del lugar muy pendientes y cordiales, lo super recomiendo 🙏", by:"Milena", from:"Colombia", when:"October 2026"},
+      {q:"Excelente lugar con una gran ubicación y las amenidades necesarias para disfrutar de unos días en Bogotá. Pablo & Patricia estuvieron siempre al tanto y en contacto durante todo el proceso.", by:"Sergio", from:"México", when:"November 2026"}
+    ]
   },
   {
     id:"fagua", number:"02", name:"Fagua", phrase:"A bohemian colonial loft.", logo:"assets/logo-fagua.jpg",
@@ -585,7 +597,12 @@ var HOUSES = [
     amenities:["Real wood fireplace","Indoor hammock","Mosaic kitchen","Walk-in shower","Private balcony","Quiet central setting"],
     images:["01","02","04","07","09","11","12","14","16","19","20","23"],
     alts:["Fagua tiled fireplace with a real fire","Fagua open living space","Fagua indoor hammock","Fagua mosaic kitchen","Fagua dining room","View from Fagua dining room","Fagua first bedroom","Fagua loft bedroom","Fagua bathroom","Fagua colonial facade","La Candelaria street near Fagua","Fagua private balcony"],
-    airbnb:"https://www.airbnb.com/rooms/1548849428183932969"
+    airbnb:"https://www.airbnb.com/rooms/1548849428183932969",
+    quotes:[
+      {q:"Sin duda, uno de sus mayores atractivos es la ubicación, perfecta para conocer Bogotá, ya que se encuentra muy cerca de museos, plazas, restaurantes y varios de los principales sitios de interés de la ciudad.", by:"Maria", from:"México", when:"October 2026"},
+      {q:"El alojamiento es muy acogedor y tiene todo lo necesario para pasar un estadía agradable. El anfitrión siempre está al pendiente y siempre brinda ayuda.", by:"Jonathan", from:"México", when:"September 2026"},
+      {q:"Es un lugar que inspira paz.", by:"Lina", from:"", when:"October 2026"}
+    ]
   },
   {
     id:"iechie", number:"03", name:"IeChie", phrase:"The road to light.", bookable:true, logo:"assets/logo-iechie.jpg",
@@ -594,7 +611,12 @@ var HOUSES = [
     amenities:["Three private levels","Balcony with hammock","Full kitchen","Shared colonial patios","24-hour security","Fast Wi-Fi and workspace"],
     images:["02","01","03","05","06","11","13","16","22","27","29","31"],
     alts:["IeChie timbered living room","IeChie shared colonial patio","IeChie top-floor bedroom","IeChie balcony over the patio","IeChie social living room","IeChie rustic bathroom","IeChie rooftop view","IeChie covered hammock balcony","IeChie second bedroom","IeChie kitchen","IeChie casona facade","IeChie sculptural log staircase"],
-    airbnb:"https://www.airbnb.com/rooms/1725785742317243773"
+    airbnb:"https://www.airbnb.com/rooms/1725785742317243773",
+    quotes:[
+      {q:"La casa está ubicada en un punto privilegiado de La Candelaria, muy cerca del centro histórico de Bogotá y con fácil acceso a restaurantes, tiendas, cafés y lugares emblemáticos. La propiedad es hermosa, conserva ese encanto colonial tan característico de la zona y está extremadamente bien cuidada.", by:"Lorenzo", from:"Costa Rica", when:"November 2026"},
+      {q:"El lugar es muy lindo, la zona también, está muy bien ubicado cerca de muchos lugares de interés, tiendas y restaurantes […] los anfitriones son muy amables desde el momento de la reserva, durante la estancia y a nuestra salida siempre estuvieron al pendiente de nosotros.", by:"Vania", from:"México", when:"October 2026"},
+      {q:"El apartamento es increíble, es como viajar en el tiempo a una época colonial. El edificio dónde se encuentra ubicado el apartamento esta llena de historia, personas muy agradables y espacios verdes muy organizados y limpios.", by:"Pedro", from:"Miami, Florida", when:"October 2026"}
+    ]
   },
   {
     id:"centrico19", number:"04", name:"Céntrico19", phrase:"A hammock in the sky.", bookable:true, logo:"assets/logo-centrico19.jpg",
@@ -603,7 +625,12 @@ var HOUSES = [
     amenities:["Indoor hammock","Washer and dryer","Big screen TV","Brick living room","Fast Wi-Fi","Steps from Eje Ambiental"],
     images:["02","01","04","03","05","08","10","11","13","15","16","17"],
     alts:["Céntrico19 indoor hammock on the eleventh floor","Céntrico19 brick living room with sofa bed","Céntrico19 living room and workspace","Céntrico19 factory cart coffee table","Céntrico19 open kitchen with washer and dryer","Céntrico19 mustard bedroom","Céntrico19 bedroom with balcony doors","Céntrico19 bedroom with big screen TV","Céntrico19 bathroom with red vessel sink","Parque de los Periodistas near Céntrico19","Eje Ambiental walkway below Céntrico19","Calle 19 street outside Céntrico19"],
-    airbnb:"https://www.airbnb.com/rooms/755309137894303486"
+    airbnb:"https://www.airbnb.com/rooms/755309137894303486",
+    quotes:[
+      {q:"Muy agradable, tal como las fotos, tranquilo y cerca a zona universitaria y el centro.", by:"Nicolas", from:"Colombia", when:"September 2026"},
+      {q:"Segunda vez que me quedo en este departamento. Excelente como siempre, buena ubicacion, hermoso departamento y buen host", by:"Ignacio", from:"Argentina", when:"September 2026"},
+      {q:"La decoración es preciosa y cada detalle hace que el espacio sea aún más acogedor. Los anfitriones fueron muy amables y estuvieron siempre atentos, respondiendo oportunamente a mis consultas.", by:"Margie", from:"Colombia", when:"November 2026"}
+    ]
   }
 ];
 
@@ -675,6 +702,29 @@ HOUSES.forEach(function(house){
   a.href = house.airbnb; a.target = "_blank"; a.rel = "noreferrer";
   a.innerHTML = "<span>" + house.name + "</span><strong>" + house.rating + "</strong><small>" + house.reviews + " Airbnb reviews</small><b aria-hidden='true'>↗</b>";
   reviewsRoot.appendChild(a);
+});
+
+/* Guest quotes */
+var quotesRoot = document.getElementById("quotes-root");
+HOUSES.forEach(function(house){
+  if(!house.quotes || !house.quotes.length) return;
+  var group = document.createElement("div");
+  group.className = "review-group";
+  var h = document.createElement("h3");
+  h.textContent = house.name;
+  group.appendChild(h);
+  house.quotes.forEach(function(rv){
+    var q = document.createElement("blockquote");
+    q.className = "review-quote";
+    var p = document.createElement("p");
+    p.textContent = "\u201C" + rv.q + "\u201D";
+    var f = document.createElement("footer");
+    f.textContent = "\u2605\u2605\u2605\u2605\u2605  " + rv.by + (rv.from ? " \u00B7 " + rv.from : "") + " \u00B7 " + rv.when;
+    q.appendChild(p);
+    q.appendChild(f);
+    group.appendChild(q);
+  });
+  quotesRoot.appendChild(group);
 });
 
 /* Footer links */
